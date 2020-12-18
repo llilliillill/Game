@@ -1,10 +1,17 @@
 /* [ ЗАПРЕТИТЬ SCROLL ] */
-window.scrollTo(0,0);
-document.body.style.overflow = 'hidden';
+window.scroll(0,0);
+// document.body.style.overflow = 'hidden';
+
+/* [ ЗАПРЕТИТЬ ONCONTEXTMENU ] */
+document.oncontextmenu = function(){ return false; }
 
 /* [ ... ] */
 let x = 300;
-let y = 300;
+let y = 400;
+
+/* [ ... ] */
+let scrollX = 0;
+let scrollY = 0;
 
 /* [ ... ] */
 let score = [0];
@@ -15,26 +22,46 @@ function random(min,max){
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/* [ MENU ] */
+function setMenu(x){
+  if(document.getElementById('menu')){
+  document.getElementById('menu').remove();}
+  let menu = document.createElement('div');
+  menu.setAttribute('id', 'menu');
+  menu.style.width = '100%';
+  menu.style.zIndex = '2';
+  menu.style.position = 'fixed';
+  menu.style.height = '30px';
+  menu.style.textAlign = 'center';
+  menu.style.lineHeight = '1.8';
+  menu.style.background = 'whitesmoke';
+  menu.style.border = '1px solid green';
+  menu.innerHTML = '<b style="color:green;">'+x+'</b>';
+  document.body.append(menu);
+  setTimeout(() => { menu.remove(); }, 3000);
+} 
+
 /* [ INFO ] */
 function setInfo(){
   let info = document.getElementById('info');
   info.style.width = '100%';
   info.style.height = '30px';
   info.style.position = 'fixed';
+  info.style.zIndex = '2';
   info.style.textAlign = 'center';
   info.style.lineHeight = '1.8';
-  info.style.border = '1px solid red';
+  info.style.background = 'whitesmoke';
+  info.style.border = '1px solid black';
 } setInfo();
 
 /* [ CREATE USER ] */
 let usr = document.createElement('img');
-usr.style.margin = x+'px 0 0 '+y+'px'; // [ ! ] \\
+usr.style.margin = x+'px 0 0 '+y+'px'; 
 usr.style.border = '1px solid black';
 usr.style.position = 'absolute';
 usr.style.zIndex = 1;
 usr.style.width = '50px';
 usr.style.height = '50px';
-usr.style.userSelect = 'none';
 usr.src = 'img/0.png';
 usr.setAttribute('id', 'user');
 document.body.append(usr);
@@ -55,24 +82,27 @@ function setWall(x,y,z){
 setWall(600,200,'gray');
 setWall(800,400,'pink');
 
-/* [ CREATE STAR ] */
-function setStar(x,y){
-  let star = document.createElement('img');
-  star.style.border = '1px solid black';
-  star.style.margin = random(x,y)+'px 0 0 '
-                     +random(x,y)+'px';
-  star.style.zIndex = 1;
-  star.style.position = 'absolute';
-  star.style.width = '50px';
-  star.style.height = '50px';
-  star.src = 'img/star.png';
-  star.setAttribute('x', x);
-  star.setAttribute('y', y);
-  star.setAttribute('class', 'star');
-  document.body.append(star);
-} 
 
-setStar(0,200);
+/* [ CREATE STAR ] */
+function setStar(x,y){ 
+  setTimeout(()=>{
+    let star = document.createElement('img');
+    star.style.border = '2px solid yellow';
+    star.style.borderRadius = '50%';
+    star.style.margin = random(x,y)+'px 0 0 '
+                      +random(x,y)+'px';
+    star.style.zIndex = 1;
+    star.style.position = 'absolute';
+    star.style.width = '50px';
+    star.style.height = '50px';
+    star.src = 'img/star.png';
+    star.setAttribute('x', x);
+    star.setAttribute('y', y);
+    star.setAttribute('class', 'star');
+    document.body.append(star);
+  }, 1000); 
+} 
+setStar(100,300);
 setStar(400,600);
 
 /* [ MARKER ] */
@@ -89,48 +119,43 @@ function marker(x,y,z){
 }
 
 /* [ ... ] */
-// user.onclick = function(){ // }
+user.onclick = function(){ 
+  window.scroll(scrollX,scrollY);
+  x = 300; y = 400; 
+  usr.style.margin = x+'px 0 0 '+y+'px';
+}
 
 /* [ ... ] */
 let elem = [];
 let el = [];
 
 function contact(){
+  elem[0] = document.elementFromPoint(usr.getBoundingClientRect().x,usr.getBoundingClientRect().y-2);
+  elem[1] = document.elementFromPoint(usr.getBoundingClientRect().x-2,usr.getBoundingClientRect().y);
+  elem[2] = document.elementFromPoint(usr.getBoundingClientRect().x+50,usr.getBoundingClientRect().y-2);
+  elem[3] = document.elementFromPoint(usr.getBoundingClientRect().x+52,usr.getBoundingClientRect().y);
+  elem[4] = document.elementFromPoint(usr.getBoundingClientRect().x+52,usr.getBoundingClientRect().y+50);
+  elem[5] = document.elementFromPoint(usr.getBoundingClientRect().x+50,usr.getBoundingClientRect().y+52);
+  elem[6] = document.elementFromPoint(usr.getBoundingClientRect().x,usr.getBoundingClientRect().y+52);
+  elem[7] = document.elementFromPoint(usr.getBoundingClientRect().x-2,usr.getBoundingClientRect().y+50);
 
-  // let a1 = usr.getBoundingClientRect().x-2;
-  // let a2 = usr.getBoundingClientRect().y-2;
-  // let a3 = usr.getBoundingClientRect().x-2;
-  // let a4 = usr.getBoundingClientRect().y+52;
-  // let a5 = usr.getBoundingClientRect().x+52;
-  // let a6 = usr.getBoundingClientRect().y-2;
-  // let a7 = usr.getBoundingClientRect().x+52;
-  // let a8 = usr.getBoundingClientRect().y+52;
-  // elem[0] = document.elementFromPoint(a1,a2);
-  // elem[1] = document.elementFromPoint(a3,a4);
-  // elem[2] = document.elementFromPoint(a5,a6);
-  // elem[3] = document.elementFromPoint(a7,a8);
+  /* [ ... ] */
+  if(x<50){x+=2;} if(x>1998){x-=2;}
+  if(y<50){y+=2;} if(y>1998){y-=2;}
 
-  elem[0] = document.elementFromPoint(usr.getBoundingClientRect().x-2,usr.getBoundingClientRect().y-2);
-  elem[1] = document.elementFromPoint(usr.getBoundingClientRect().x-2,usr.getBoundingClientRect().y+52);
-  elem[2] = document.elementFromPoint(usr.getBoundingClientRect().x+52,usr.getBoundingClientRect().y-2);
-  elem[3] = document.elementFromPoint(usr.getBoundingClientRect().x+52,usr.getBoundingClientRect().y+52);
-
-  
   for(let i=0; i<elem.length; i++){
     /* [ STAR ] */
     if(elem[i].classList == 'star'){
-      setStar(parseInt(elem[i].getAttribute('x')), 
-              parseInt(elem[i].getAttribute('y'))); 
-              elem[i].remove();
-
-      //new Audio('img/star.mp3').play(); 
+        setStar(parseInt(elem[i].getAttribute('x')),  
+                parseInt(elem[i].getAttribute('y'))); 
+                elem[i].remove();
+      new Audio('img/star.mp3').play(); 
       score[0]++;
-      info.innerHTML = '<b style="color:green;">+'+score[0]+' star</b>';
+      setMenu('+'+score[0]+' star');
     }
 
     /* [ WALL ] */
     if(elem[i].classList == 'wall'){
-
       el[0] = document.elementFromPoint(elem[i].getBoundingClientRect().x,elem[i].getBoundingClientRect().y-2);
       el[1] = document.elementFromPoint(elem[i].getBoundingClientRect().x-2,elem[i].getBoundingClientRect().y);
       el[2] = document.elementFromPoint(elem[i].getBoundingClientRect().x+50,elem[i].getBoundingClientRect().y-2);
@@ -148,58 +173,41 @@ function contact(){
       if(el[5] == '[object HTMLImageElement]'){ x+=2; } else { el[5] = ''; }
       if(el[6] == '[object HTMLImageElement]'){ x+=2; } else { el[6] = ''; }
       if(el[7] == '[object HTMLImageElement]'){ y-=2; } else { el[7] = ''; }
-
     } 
   }
 
-  info.innerHTML = x+'px 0 0 '+y+'px';
+  info.innerHTML = scrollX+'px 0 0 '+scrollY+'px';
+  window.scroll(scrollX,scrollY)
   usr.style.margin = x+'px 0 0 '+y+'px';
 }
 
 /* [ MOVE ] */
-let m = [0,0,0,0,1,1];
+let a = 0; let b = 0;
 document.onkeydown = function(e){
   switch(e.code){
     case 'KeyW': 
-      if(m[4]){ m[4] = 0; 
-        m[0] = setInterval(() => { 
-          contact(); x -= 2;
-        }, 10); 
-      } 
+      if(!a){ a = setInterval(() => { contact(); x -= 2; scrollY-=2; }, 10); } 
     break;
     case 'KeyS': 
-      if(m[4]){ m[4] = 0; 
-        m[1] = setInterval(() => {
-          contact(); x += 2;
-        }, 10);
-      } 
+      if(!a){ a = setInterval(() => { contact(); x += 2; scrollY+=2; }, 10); } 
     break;
-  }
-  switch(e.code){
     case 'KeyA': 
-      if(m[5]){ m[5] = 0; 
-        m[2] = setInterval(() => { 
-          contact(); y -= 2;
-        }, 10); 
-      }
+      if(!b){ b = setInterval(() => { contact(); y -= 2; scrollX-=2; }, 10); }
     break;
     case 'KeyD': 
-      if(m[5]){ m[5] = 0; 
-        m[3] = setInterval(() => { 
-          contact(); y += 2;
-        }, 10);
-      }
+      if(!b){ b = setInterval(() => { contact(); y += 2; scrollX+=2; }, 10); }
     break;
   }
 }
-document.onkeyup = function(e){
+document.onkeyup = function(e){ 
   switch(e.code){
-    case 'KeyW': clearInterval(m[0]); m[4] = 1; break;
-    case 'KeyS': clearInterval(m[1]); m[4] = 1; break;
-    case 'KeyA': clearInterval(m[2]); m[5] = 1; break;
-    case 'KeyD': clearInterval(m[3]); m[5] = 1; break;
+    case 'KeyW': clearInterval(a); a = 0; break;
+    case 'KeyS': clearInterval(a); a = 0; break;
+    case 'KeyA': clearInterval(b); b = 0; break;
+    case 'KeyD': clearInterval(b); b = 0; break;
   } 
 }
+
 
 
 

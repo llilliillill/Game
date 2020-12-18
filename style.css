@@ -1,10 +1,20 @@
 *{
   margin: 0;
   padding: 0;
+  user-select: none;
 }
 
 body{
   background: whitesmoke;
 }
 
+/* [ MAP ] */
+#map{
+  border: 1px solid red;
+  position: absolute;
+  margin: 50px;
+  width: 2000px;
+  height: 2000px;
+  background: url('img/plitca.jpg');
+}
 
