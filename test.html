@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="info"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  <div style="border:1px solid black;width: 50px;height: 50px;margin:50px auto 0 auto;"></div>
+  
+  <script>
+
+    let elem = document.elementFromPoint(25,25);
+    let elem2 = document.elementFromPoint(678,155);
+
+    elem.style.background = 'red';
+    elem2.style.background = 'green';
+    //alert(elem.tagName);
+    
+    document.body.onclick = function(e){
+      document.elementFromPoint(e.pageX,e.pageY).style.background = 'yellow';
+    }
+  </script>
+</body>
+</html>
