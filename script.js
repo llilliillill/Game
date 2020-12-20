@@ -1,21 +1,20 @@
 /* [ ЗАПРЕТИТЬ SCROLL ] */
-window.scroll(0,0);
-// document.body.style.overflow = 'hidden';
+//window.scroll(0,0);
+document.body.style.overflow = 'hidden';
 
 /* [ ЗАПРЕТИТЬ ONCONTEXTMENU ] */
-document.oncontextmenu = function(){ return false; }
+document.oncontextmenu = function(){ sx=0; sy=0; window.scroll(0,0); return false; }
 
 /* [ ... ] */
-let x = 300;
-let y = 400;
+let x = 200; 
+let y = 400; 
+
+/* [ SCROLL ] */
+let sx = 0; 
+let sy = 0; 
 
 /* [ ... ] */
-let scrollX = 0;
-let scrollY = 0;
-
-/* [ ... ] */
-let score = [0];
-//score[0] - stars
+let score = [0]; 
 
 /* [ RANDOM ] */
 function random(min,max){
@@ -82,24 +81,23 @@ function setWall(x,y,z){
 setWall(600,200,'gray');
 setWall(800,400,'pink');
 
-
 /* [ CREATE STAR ] */
 function setStar(x,y){ 
-  setTimeout(()=>{
-    let star = document.createElement('img');
-    star.style.border = '2px solid yellow';
-    star.style.borderRadius = '50%';
-    star.style.margin = random(x,y)+'px 0 0 '
+  setTimeout(() => {
+    let a = document.createElement('img');
+    a.style.border = '2px solid orange';
+    a.style.borderRadius = '50%';
+    a.style.margin = random(x,y)+'px 0 0 '
                       +random(x,y)+'px';
-    star.style.zIndex = 1;
-    star.style.position = 'absolute';
-    star.style.width = '50px';
-    star.style.height = '50px';
-    star.src = 'img/star.png';
-    star.setAttribute('x', x);
-    star.setAttribute('y', y);
-    star.setAttribute('class', 'star');
-    document.body.append(star);
+    a.style.zIndex = 1;
+    a.style.position = 'absolute';
+    a.style.width = '50px';
+    a.style.height = '50px';
+    a.src = 'img/star.png';
+    a.setAttribute('x', x);
+    a.setAttribute('y', y);
+    a.setAttribute('class', 'star');
+    document.body.append(a);
   }, 1000); 
 } 
 setStar(100,300);
@@ -118,12 +116,48 @@ function marker(x,y,z){
   document.body.append(div);
 }
 
-/* [ ... ] */
-user.onclick = function(){ 
-  window.scroll(scrollX,scrollY);
-  x = 300; y = 400; 
-  usr.style.margin = x+'px 0 0 '+y+'px';
+/* [ MOUSEMARCER ] */
+document.body.onclick = function(e){
+  let a = document.createElement('div');
+  a.style.margin = (e.clientY-13)+'px 0 0 '
+                    +(e.clientX+1)+'px';
+  a.style.zIndex = 4;
+  a.style.width = '60px';
+  a.style.height = '12px';
+  a.style.fontSize = '10px';
+  a.style.textAlign = 'center';
+  a.style.position = 'absolute';
+  a.style.border = '1px solid black';
+  a.style.background = 'whitesmoke';
+  a.setAttribute('class', 'mousemarker');
+  a.innerHTML = 'x: '+e.clientX+' y: '+e.clientY;
+  document.body.append(a);
+
+  let b = document.createElement('div');
+  b.style.margin = e.clientY+'px 0 0 '+e.clientX+'px';
+  b.style.zIndex = 4;
+  b.style.width = '2px';
+  b.style.height = '2px';
+  b.style.background = 'red';
+  b.style.position = 'absolute';
+  b.setAttribute('class', 'pointmarker');
+  document.body.append(b);
+
+  setTimeout(() => { 
+    a.remove(); b.remove(); 
+  }, 3000);
 }
+
+
+
+/* [ ... ] */
+// user.onclick = function(){ 
+//   window.scroll(scrollX,scrollY);
+//   x = 300; y = 400; 
+//   usr.style.margin = x+'px 0 0 '+y+'px';
+// }
+
+
 
 /* [ ... ] */
 let elem = [];
@@ -146,12 +180,12 @@ function contact(){
   for(let i=0; i<elem.length; i++){
     /* [ STAR ] */
     if(elem[i].classList == 'star'){
-        setStar(parseInt(elem[i].getAttribute('x')),  
-                parseInt(elem[i].getAttribute('y'))); 
-                elem[i].remove();
+      setStar(parseInt(elem[i].getAttribute('x')),
+              parseInt(elem[i].getAttribute('y'))); 
+      elem[i].remove();
       new Audio('img/star.mp3').play(); 
-      score[0]++;
-      setMenu('+'+score[0]+' star');
+      score[0]++; setMenu('+'+score[0]+' star');
+      break;
     }
 
     /* [ WALL ] */
@@ -173,11 +207,12 @@ function contact(){
       if(el[5] == '[object HTMLImageElement]'){ x+=2; } else { el[5] = ''; }
       if(el[6] == '[object HTMLImageElement]'){ x+=2; } else { el[6] = ''; }
       if(el[7] == '[object HTMLImageElement]'){ y-=2; } else { el[7] = ''; }
+      break;
     } 
   }
 
-  info.innerHTML = scrollX+'px 0 0 '+scrollY+'px';
-  window.scroll(scrollX,scrollY)
+  info.innerHTML = sx+'px 0 0 '+sy+'px';
+  window.scroll(sx,sy);
   usr.style.margin = x+'px 0 0 '+y+'px';
 }
 
@@ -186,16 +221,16 @@ let a = 0; let b = 0;
 document.onkeydown = function(e){
   switch(e.code){
     case 'KeyW': 
-      if(!a){ a = setInterval(() => { contact(); x -= 2; scrollY-=2; }, 10); } 
+      if(!a){ a = setInterval(() => { contact(); x-=2; sy-=2; },10); } 
     break;
     case 'KeyS': 
-      if(!a){ a = setInterval(() => { contact(); x += 2; scrollY+=2; }, 10); } 
+      if(!a){ a = setInterval(() => { contact(); x+=2; sy+=2; },10); } 
     break;
     case 'KeyA': 
-      if(!b){ b = setInterval(() => { contact(); y -= 2; scrollX-=2; }, 10); }
+      if(!b){ b = setInterval(() => { contact(); y-=2; sx-=2; },10); }
     break;
     case 'KeyD': 
-      if(!b){ b = setInterval(() => { contact(); y += 2; scrollX+=2; }, 10); }
+      if(!b){ b = setInterval(() => { contact(); y+=2; sx+=2; },10); }
     break;
   }
 }

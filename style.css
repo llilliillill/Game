@@ -4,6 +4,7 @@
   user-select: none;
 }
 
+/* [ ... ] */
 body{
   background: whitesmoke;
 }
@@ -15,6 +16,6 @@ body{
   margin: 50px;
   width: 2000px;
   height: 2000px;
-  background: url('img/plitca.jpg');
+  /* background: url('img/plitca.jpg'); */
 }
 
