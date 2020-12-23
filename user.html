@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ПЕРСОНАЖ</title>
+</head>
+<body>
+  <!-- [ INFO ] -->
+  <div id='info'></div>
+
+  <!-- [ BLOCK ] -->
+  <div id='block'>
+    <div class="cube">0</div>
+    <div class="cube">1</div>
+    <div class="cube">2</div>
+
+    <div class="cube">3</div>
+    <img class="cube" src="img/usr/0.png">
+    <div class="cube">5</div>
+
+    <div class="cube">6</div>
+    <div class="cube">7</div>
+    <div class="cube">8</div>
+  </div>
+
+
+
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+
+    /* [ BLOCK ] */
+    #block{
+      border: 2px solid black; 
+      width: 168px;
+      height: 168px;
+      margin: 50px auto 0 auto;
+    }
+    .cube{
+      border: 2px solid black; 
+      margin: 1px;
+      width: 50px;
+      height: 50px;
+      float: left;
+    }
+
+    /* [ USER ] */
+    .cube:nth-child(5){
+      border: 2px solid red;
+    }
+  </style>
+
+
+
+  <script>
+    /* [ CUBE ] */
+    let cube = document.getElementsByClassName('cube');
+
+    /* [ INFO ] */
+    function setInfo(){
+      let a = document.getElementById('info');
+      a.style.width = '100%';
+      a.style.height = '30px';
+      a.style.position = 'relative';
+      a.style.zIndex = '2';
+      a.style.textAlign = 'center';
+      a.style.lineHeight = '1.8';
+      a.style.background = 'whitesmoke';
+      a.style.border = '1px solid black';
+    } setInfo();
+
+
+    document.onmousemove = function(e){
+      document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY;
+    }
+
+    /* [ ANIMATION ] */
+    let a = ''; let b = ''; 
+    document.onkeydown = function(e){ 
+      if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ 
+
+        /* [ ... ] */
+        if(a == '' || b == ''){ if(a != '' && e.code != a){ if(a != b){ b = e.code; } } else { a = e.code; }
+
+          if(a == 'KeyW'){ cube[1].style.border = '2px solid green'; cube[4].src = 'img/usr/0.png'; }
+          if(a == 'KeyS'){ cube[7].style.border = '2px solid green'; cube[4].src = 'img/usr/1.png'; }
+          if(a == 'KeyA'){ cube[3].style.border = '2px solid green'; cube[4].src = 'img/usr/2.png'; }
+          if(a == 'KeyD'){ cube[5].style.border = '2px solid green'; cube[4].src = 'img/usr/3.png'; }
+
+          if(a == 'KeyW' && b == 'KeyD' || b == 'KeyW' && a == 'KeyD'){ 
+            cube[2].style.border = '2px solid green'; cube[4].src = 'img/usr/5.png'; } 
+          if(a == 'KeyW' && b == 'KeyA' || b == 'KeyW' && a == 'KeyA'){ 
+            cube[0].style.border = '2px solid green'; cube[4].src = 'img/usr/4.png'; } 
+          if(a == 'KeyS' && b == 'KeyD' || b == 'KeyS' && a == 'KeyD'){ 
+            cube[8].style.border = '2px solid green'; cube[4].src = 'img/usr/7.png'; } 
+          if(a == 'KeyS' && b == 'KeyA' || b == 'KeyS' && a == 'KeyA'){ 
+            cube[6].style.border = '2px solid green'; cube[4].src = 'img/usr/6.png'; } 
+
+          document.getElementById('info').innerHTML = 'a: '+a+' b: '+b; 
+        } 
+      }
+
+      /* [ DEAD USER ] */
+      let n = 0;
+      if(e.code == 'KeyE'){ 
+        let dead = setInterval(() => {
+          cube[4].src = 'img/dead/'+n+'.png';
+          if(n<5){ n++; } else { n = 0; clearInterval(dead); }
+        }, 100); 
+      }
+    }
+
+    document.onkeyup = function(e){ 
+      for(let i=0; i<9; i++){ cube[i].style.border = '2px solid black'; }
+      
+      if(e.code == 'KeyW'){ if(a == 'KeyW'){ a = ''; } if(b == 'KeyW'){ b = ''; } }
+      if(e.code == 'KeyS'){ if(a == 'KeyS'){ a = ''; } if(b == 'KeyS'){ b = ''; } }
+      if(e.code == 'KeyA'){ if(a == 'KeyA'){ a = ''; } if(b == 'KeyA'){ b = ''; } }
+      if(e.code == 'KeyD'){ if(a == 'KeyD'){ a = ''; } if(b == 'KeyD'){ b = ''; } }
+
+      document.getElementById('info').innerHTML = 'a: '+a+' b: '+b;
+
+    }
+
+
+
+
+    /* [ ANIMATION ] */
+    // let q = []; 
+    // document.onkeydown = function(e){ 
+    //   if(e.code == 'KeyW' || e.code == 'KeyS' || e.code == 'KeyA' || e.code == 'KeyD'){
+
+    //     if(e.code != q[q.length-1]){ q.push(e.code); }
+
+    //     if(q[0] == 'KeyW'){ cube[1].style.border = '2px solid green'; cube[4].src = 'img/usr/0.png'; }
+    //     if(q[0] == 'KeyS'){ cube[7].style.border = '2px solid green'; cube[4].src = 'img/usr/1.png'; }
+    //     if(q[0] == 'KeyA'){ cube[3].style.border = '2px solid green'; cube[4].src = 'img/usr/2.png'; }
+    //     if(q[0] == 'KeyD'){ cube[5].style.border = '2px solid green'; cube[4].src = 'img/usr/3.png'; }
+
+    //     if(q[0]=='KeyW' && q[1]=='KeyD' || q[1]=='KeyW' && q[0]=='KeyD'){ 
+    //       cube[2].style.border = '2px solid green'; cube[4].src = 'img/usr/5.png';} 
+    //     if(q[0]=='KeyW' && q[1]=='KeyA' || q[1]=='KeyW' && q[0]=='KeyA'){ 
+    //       cube[0].style.border = '2px solid green'; cube[4].src = 'img/usr/4.png'; }  
+    //     if(q[0]=='KeyS' && q[1]=='KeyD' || q[1]=='KeyS' && q[0]=='KeyD'){ 
+    //       cube[8].style.border = '2px solid green'; cube[4].src = 'img/usr/7.png';} 
+    //     if(q[0]=='KeyS' && q[1]=='KeyA' || q[1]=='KeyS' && q[0]=='KeyA'){ 
+    //       cube[6].style.border = '2px solid green'; cube[4].src = 'img/usr/6.png';}
+        
+    //     document.getElementById('info').innerHTML = 'q: '+q[0]+', '+q[1]+', '+q[2]+', '+q[3];
+    //   }
+
+    //   /* [ DEAD USER ] */
+    //   let n = 0;
+    //   if(e.code == 'KeyE'){ 
+    //     let dead = setInterval(() => {
+    //       cube[4].src = 'img/dead/'+n+'.png';
+    //       if(n<5){ n++; } else { n = 0; clearInterval(dead); }
+    //     }, 100); 
+    //   }
+
+    // }
+
+    // document.onkeyup = function(e){ 
+    //   for(let i=0; i<9; i++){
+    //     cube[i].style.border = '2px solid black';
+    //   }
+    //   q.pop();
+    // }
+
+
+
+
+    /* [ MOVE ] */
+    // function contact(){
+    //   document.getElementById('info').innerHTML = x+'px 0 0 '+y+'px';
+    // }
+    // let x = 200; let y = 400;
+    // let sx = 0; let sy = 0;
+    // let a = 0; let b = 0;
+    // document.onkeydown = function(e){
+    //   anim(e.code);
+    //   switch(e.code){
+    //     case 'KeyW': 
+    //       if(!a){ a = setInterval(() => { 
+    //         contact(); x-=2; sy-=2; 
+    //       },10); }
+    //     break;
+    //     case 'KeyS': 
+    //       if(!a){ a = setInterval(() => { 
+    //         contact(); x+=2; sy+=2;
+    //       },10); }
+    //     break;
+    //     case 'KeyA': 
+    //       if(!b){ b = setInterval(() => { 
+    //         contact(); y-=2; sx-=2; 
+    //       },10); }
+    //     break;
+    //     case 'KeyD': 
+    //       if(!b){ b = setInterval(() => { 
+    //         contact(); y+=2; sx+=2; 
+    //       },10); }
+    //     break;
+    //   }
+    // }
+    // document.onkeyup = function(e){ 
+
+    //   for(let i=0; i<9; i++){
+    //     cube[i].style.border = '2px solid black';
+    //   }
+    //   cube[4].src = 'img/0.png';
+
+    //   switch(e.code){
+    //     case 'KeyW': clearInterval(a); a = 0; q.pop(); break;
+    //     case 'KeyS': clearInterval(a); a = 0; q.pop(); break;
+    //     case 'KeyA': clearInterval(b); b = 0; q.pop(); break;
+    //     case 'KeyD': clearInterval(b); b = 0; q.pop(); break;
+    //   } 
+    // }
+
+  </script>
+</body>
+</html>
