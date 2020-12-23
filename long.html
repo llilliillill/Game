@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LONG</title>
+</head>
+<body>
+  <div id="cude"></div>
+
+  <style>
+    *{
+      margin: 0;
+      padding: 0;
+    }
+    #cude{
+      border: 2px solid gray;
+      border-top: 2px solid green;
+      border-right: 2px solid green;
+      position: absolute; 
+      width: 50px;
+      height: 50px;
+      margin: 200px 0 0 650px;
+      transform: rotate(-4deg);
+      z-index: 1;
+    }
+  </style>
+
+  <script>
+    function setMenu(x){
+      if(document.getElementById('menu')){
+      document.getElementById('menu').remove();}
+      let a = document.createElement('div');
+      a.setAttribute('id', 'menu');
+      a.style.width = '100%';
+      a.style.zIndex = '2';
+      a.style.position = 'fixed';
+      a.style.height = '30px';
+      a.style.textAlign = 'center';
+      a.style.lineHeight = '1.8';
+      a.style.background = 'whitesmoke';
+      a.style.border = '1px solid green';
+      a.innerHTML = '<b style="color:green;">'+x+'</b>';
+      document.body.append(a);
+      setTimeout(() => { a.remove(); }, 1000);
+    } 
+
+    /* [ MOUSEMARCER ] */
+    document.body.onclick = function(e){
+      let a = document.createElement('div');
+      a.style.margin = (e.clientY-13)+'px 0 0 '
+                        +(e.clientX+1)+'px';
+      a.style.zIndex = 4;
+      a.style.width = '60px';
+      a.style.height = '12px';
+      a.style.fontSize = '10px';
+      a.style.textAlign = 'center';
+      a.style.position = 'absolute';
+      a.style.border = '1px solid black';
+      a.style.background = 'whitesmoke';
+      a.setAttribute('class', 'mousemarker');
+      a.innerHTML = 'x: '+e.clientX+' y: '+e.clientY;
+      document.body.append(a);
+
+      let b = document.createElement('div');
+      b.style.margin = e.clientY+'px 0 0 '+e.clientX+'px';
+      b.style.zIndex = 4;
+      b.style.width = '2px';
+      b.style.height = '2px';
+      b.style.background = 'red';
+      b.style.position = 'absolute';
+      b.setAttribute('class', 'pointmarker');
+      document.body.append(b);
+
+      setTimeout(() => { 
+        a.remove(); b.remove(); 
+      }, 3000);
+    }
+
+    function marker(x,y,z){
+      let a = document.createElement('div');
+      a.style.margin = y+'px 0 0 '+x+'px';
+      a.style.width = '2px';
+      a.style.height = '2px';
+      a.style.background = 'red';
+      if(z){a.style.background = z;}
+      a.style.position = 'absolute';
+      a.style.zIndex = 3;
+      document.body.append(a);
+    } 
+    marker((650+25),(200+25),'red');
+    marker(750,100,'green');
+
+
+  
+    var x = 675;
+    var y = 225;
+
+    var x2 = 750;
+    var y2 = 100;
+
+    let b = y-y2;
+    let c = Math.round( Math.sqrt(Math.pow(x-x2,2) + Math.pow(y-y2,2)) ); // 146
+    let tgA = Math.trunc((b/c)*57.2958);
+ 
+    setMenu(c);
+
+    //var res = Math.sqrt(Math.pow(x-x2,2) + Math.pow(y-y2,2)); setMenu(res);
+
+  </script>
+</body>
+</html>

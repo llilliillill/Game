@@ -126,7 +126,20 @@
     }
 
 
+    /* [ MARKER ] */
+    function marker(x,y,z){
+      let a = document.createElement('div');
+      a.style.margin = y+'px 0 0 '+x+'px';
+      a.style.width = '2px';
+      a.style.height = '2px';
+      a.style.background = 'red';
+      if(z){a.style.background = z;}
+      a.style.position = 'absolute';
+      a.style.zIndex = 3;
+      document.body.append(a);
+    } marker(400,400,'black');
 
+    
 
     /* [ ANIMATION ] */
     // let q = []; 
