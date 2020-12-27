@@ -59,6 +59,10 @@
     /* [ CUBE ] */
     let cube = document.getElementsByClassName('cube');
 
+    // cube[4].onclick = () => {
+    //   document.getElementById('info').innerHTML = cube[4].width;
+    // }
+
     /* [ INFO ] */
     function setInfo(){
       let a = document.getElementById('info');
@@ -73,9 +77,36 @@
     } setInfo();
 
 
-    document.onmousemove = function(e){
-      document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY;
+    document.onmousemove = (e) => {
+      if(e.pageX>750 && e.pageY<80){
+        document.getElementById('info').innerHTML = '<b style="color:red;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/5.png';
+      } else if(e.pageX<590 && e.pageY<80){
+        document.getElementById('info').innerHTML = '<b style="color:green;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/4.png';
+      } else if(e.pageX<590 && e.pageY>250){
+        document.getElementById('info').innerHTML = '<b style="color:yellow;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/6.png';
+      } else if(e.pageX>760 && e.pageY>250){
+        document.getElementById('info').innerHTML = '<b style="color:blue;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/7.png';
+      } else if(e.pageX>760 && e.pageY>80){
+        document.getElementById('info').innerHTML = '<b style="color:pink;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/3.png';
+      } else if(e.pageX<590 && e.pageY>80){
+        document.getElementById('info').innerHTML = '<b style="color:grey;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/2.png';
+      } else if(e.pageX>590 && e.pageY<80){
+        document.getElementById('info').innerHTML = '<b style="color:blue;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/0.png';
+      } else if(e.pageX>590 && e.pageY>250){
+        document.getElementById('info').innerHTML = '<b style="color:red;">x: '+e.pageX+' y: '+e.pageY+'</b>';
+        cube[4].src = 'img/usr/1.png';
+      } else {
+        document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY;
+      }
     }
+
 
     /* [ ANIMATION ] */
     let a = ''; let b = ''; 
@@ -104,13 +135,13 @@
       }
 
       /* [ DEAD USER ] */
-      let n = 0;
-      if(e.code == 'KeyE'){ 
-        let dead = setInterval(() => {
-          cube[4].src = 'img/dead/'+n+'.png';
-          if(n<5){ n++; } else { n = 0; clearInterval(dead); }
-        }, 100); 
-      }
+      // let n = 0;
+      // if(e.code == 'KeyE'){ 
+      //   let dead = setInterval(() => {
+      //     cube[4].src = 'img/dead/'+n+'.png';
+      //     if(n<5){ n++; } else { n = 0; clearInterval(dead); }
+      //   }, 100); 
+      // }
     }
 
     document.onkeyup = function(e){ 

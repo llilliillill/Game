@@ -6,6 +6,7 @@
   <title>LONG</title>
 </head>
 <body>
+  <div id="info"></div>
   <div id="cude"></div>
 
   <style>
@@ -21,7 +22,6 @@
       width: 50px;
       height: 50px;
       margin: 200px 0 0 650px;
-      transform: rotate(-4deg);
       z-index: 1;
     }
   </style>
@@ -45,11 +45,24 @@
       setTimeout(() => { a.remove(); }, 1000);
     } 
 
+    /* [ INFO ] */
+    function setInfo(){
+      let a = document.getElementById('info');
+      a.style.width = '100%';
+      a.style.height = '30px';
+      a.style.position = 'relative';
+      a.style.zIndex = '2';
+      a.style.textAlign = 'center';
+      a.style.lineHeight = '1.8';
+      a.style.background = 'whitesmoke';
+      a.style.border = '1px solid black';
+    } setInfo();
+
     /* [ MOUSEMARCER ] */
     document.body.onclick = function(e){
       let a = document.createElement('div');
       a.style.margin = (e.clientY-13)+'px 0 0 '
-                        +(e.clientX+1)+'px';
+                      +(e.clientX+1)+'px';
       a.style.zIndex = 4;
       a.style.width = '60px';
       a.style.height = '12px';
@@ -77,6 +90,7 @@
       }, 3000);
     }
 
+    /* [ MARCER ] */
     function marker(x,y,z){
       let a = document.createElement('div');
       a.style.margin = y+'px 0 0 '+x+'px';
@@ -88,24 +102,54 @@
       a.style.zIndex = 3;
       document.body.append(a);
     } 
-    marker((650+25),(200+25),'red');
-    marker(750,100,'green');
 
+    /* [ ... ] */
+    // var x = 650;
+    // var y = 200;
+    // marker((x+25),(y+25),'red');
 
-  
-    var x = 675;
-    var y = 225;
+    // var x2 = 750;
+    // var y2 = 100;
+    // marker(x2,y2,'green');
 
-    var x2 = 750;
-    var y2 = 100;
+    // // поворот тени за курсором
+    // document.onmousemove = function(e){
+    //   // получаем координаты cude
+    //   let x1 = 200; 
+    //   let y1 = 650;
 
-    let b = y-y2;
-    let c = Math.round( Math.sqrt(Math.pow(x-x2,2) + Math.pow(y-y2,2)) ); // 146
-    let tgA = Math.trunc((b/c)*57.2958);
- 
-    setMenu(c);
+    //   // координаты курсора
+    //   let x2 = e.pageX;
+    //   let y2 = e.pageY;
 
-    //var res = Math.sqrt(Math.pow(x-x2,2) + Math.pow(y-y2,2)); setMenu(res);
+    //   // координаты третей точки, чтоб получить треугольник
+    //   let x3 = x2;
+    //   let y3 = y1;
+      
+    //   // высчитываем угол
+    //   let cos = (((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2))+((x1-x3)*(x1-x3))+((y1-y3)*(y1-y3))-((x2-x3)*(x2-x3))-((y2-y3)*(y2-y3)))/(2*Math.sqrt(((x1-x2)*(x1-x2))+((y1-y2)*(y1-y2)))*Math.sqrt(((x1-x3)*(x1-x3))+((y1-y3)*(y1-y3))));
+    //   let rad = Math.acos(cos);
+    //   let degree = rad * 180 / Math.PI;
+
+    //   let degree360 = 0;
+    //   if(x2 < x1 && y2 < y1) degree360 = 180 + (90 - degree);
+    //   if(x2 > x1 && y2 < y1) degree360 = 90 + degree;
+    //   if(x2 > x1 && y2 > y1) degree360 = 90 - degree;
+    //   if(x2 < x1 && y2 > y1) degree360 = degree - 90;
+
+    //   document.getElementById('info').innerHTML = degree360;
+    //   document.getElementById('cude').style.transform = 'rotate('+degree360+'deg)';
+      
+      
+    //   // let distance = 50; // расстояние тени до текста  
+    //   // // высчитаваем координаты для тени
+    //   // let v = Math.round((distance * Math.cos(Math.PI*degree360/180)));
+    //   // let h = Math.round((distance * Math.sin(Math.PI*degree360/180)));
+    //   // let stlyle = h+'px '+v+'px 10px rgba(0, 0, 0, 1)';
+      
+    //   // // поворачиваем тень
+    //   // document.getElementById('text').style.textShadow = stlyle;
+    // }
 
   </script>
 </body>
