@@ -6,7 +6,7 @@ document.oncontextmenu = function(){ sx=0; sy=0; window.scroll(0,0); return fals
 
 /* [ ... ] */
 let x = 200; 
-let y = 200; 
+let y = 150; 
 
 /* [ SCROLL ] */
 let sx = 0; 
@@ -60,7 +60,7 @@ u.style.position = 'absolute';
 u.style.zIndex = 1;
 u.style.width = '50px';
 u.style.height = '50px';
-u.src = 'img/0.png';
+u.src = 'img/usr/1/0.png';
 u.setAttribute('id', 'user');
 document.body.append(u);
 
@@ -102,7 +102,6 @@ function setStar(x,y){
 //setStar(100,300);
 //setStar(400,600);
 
-
 /* [ MARKER ] */
 function marker(x,y,z){
   let a = document.createElement('div');
@@ -119,8 +118,8 @@ function marker(x,y,z){
 /* [ MOUSEMARCER ] */
 document.body.onclick = function(e){
   let a = document.createElement('div');
-  a.style.margin = (e.clientY-13)+'px 0 0 '
-                    +(e.clientX+1)+'px';
+  a.style.margin = (sy+e.clientY-13)+'px 0 0 '
+                        +(sx+e.clientX+1)+'px';
   a.style.zIndex = 4;
   a.style.width = '60px';
   a.style.height = '12px';
@@ -129,26 +128,22 @@ document.body.onclick = function(e){
   a.style.position = 'absolute';
   a.style.border = '1px solid black';
   a.style.background = 'whitesmoke';
-  a.setAttribute('class', 'mousemarker');
   a.innerHTML = 'x: '+e.clientX+' y: '+e.clientY;
   document.body.append(a);
 
   let b = document.createElement('div');
-  b.style.margin = e.clientY+'px 0 0 '+e.clientX+'px';
+  b.style.margin = sy+e.clientY+'px 0 0 '+sx+e.clientX+'px';
   b.style.zIndex = 4;
   b.style.width = '2px';
   b.style.height = '2px';
   b.style.background = 'red';
   b.style.position = 'absolute';
-  b.setAttribute('class', 'pointmarker');
   document.body.append(b);
 
   setTimeout(() => { 
     a.remove(); b.remove(); 
   }, 3000);
 }
-
-
 
 /* [ ... ] */
 // user.onclick = function(){ 
@@ -157,12 +152,8 @@ document.body.onclick = function(e){
 //   usr.style.margin = x+'px 0 0 '+y+'px';
 // }
 
-
-
 /* [ ... ] */
-let li = [];
-let lj = [];
-
+let li = []; let lj = [];
 function contact(){
   li[0] = document.elementFromPoint(u.getBoundingClientRect().x,u.getBoundingClientRect().y-2);
   li[1] = document.elementFromPoint(u.getBoundingClientRect().x-2,u.getBoundingClientRect().y);
@@ -210,39 +201,59 @@ function contact(){
       break;
     } 
   }
-
-  info.innerHTML = 'scroll: '+sx+'px 0 0 '+sy+'px';
-  window.scroll(sx,sy);
-u.style.margin = x+'px 0 0 '+y+'px';
+  window.scroll(sx,sy); u.style.margin = x+'px 0 0 '+y+'px';
 }
 
 /* [ MOVE ] */
 let a = 0; let b = 0;
+let c = 0; let d = 0;
 document.onkeydown = function(e){
   switch(e.code){
-    case 'KeyW': 
-      if(!a){ a = setInterval(() => { contact(); x-=2; sy-=2; },10); }
-    break;
-    case 'KeyS': 
-      if(!a){ a = setInterval(() => { contact(); x+=2; sy+=2; },10); }
-    break;
-    case 'KeyA': 
-      if(!b){ b = setInterval(() => { contact(); y-=2; sx-=2; },10); }
-    break;
-    case 'KeyD': 
-      if(!b){ b = setInterval(() => { contact(); y+=2; sx+=2; },10); }
-    break;
+    case 'KeyW': if(!a){ a = setInterval(() => { contact(); x-=2; sy-=2; }, 10); anim(e); } break; 
+    case 'KeyS': if(!a){ a = setInterval(() => { contact(); x+=2; sy+=2; }, 10); anim(e); } break; 
+    case 'KeyA': if(!b){ b = setInterval(() => { contact(); y-=2; sx-=2; }, 10); anim(e); } break; 
+    case 'KeyD': if(!b){ b = setInterval(() => { contact(); y+=2; sx+=2; }, 10); anim(e); } break; 
   }
 }
 document.onkeyup = function(e){ 
+  c = 0; d = 0; clearInterval(r);
   switch(e.code){
-    case 'KeyW': clearInterval(a); a = 0; break;
-    case 'KeyS': clearInterval(a); a = 0; break;
-    case 'KeyA': clearInterval(b); b = 0; break;
-    case 'KeyD': clearInterval(b); b = 0; break;
+    case 'KeyW': clearInterval(a); a = 0; break; 
+    case 'KeyS': clearInterval(a); a = 0; break; 
+    case 'KeyA': clearInterval(b); b = 0; break; 
+    case 'KeyD': clearInterval(b); b = 0; break; 
   } 
 }
 
+/* [ ANIMATION ] */
+let n = 0; let r = 0; let z = 0;
+function anim(e){ 
+  if(c == '' || d == ''){ if(c != '' && e.code != c){ 
+    if(c != d){ if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ d = e.code; }} 
+  } else { 
+    if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ c = e.code; }
+  }}
+  
+  if(c == 'KeyW'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/0/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyS'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/1/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/2/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/3/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
 
+  if(c == 'KeyW' && d == 'KeyD' || d == 'KeyW' && c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/5/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyW' && d == 'KeyA' || d == 'KeyW' && c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/4/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyS' && d == 'KeyD' || d == 'KeyS' && c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/7/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyS' && d == 'KeyA' || d == 'KeyS' && c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/6/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+} 
 
-
+document.onclick = (e) => { u.src =
+  (e.pageX>(y+50) && e.pageY>(x+50)) ? 'img/usr/7/'+n+'.png' :
+  (e.pageX<y && e.pageY>(x+50))      ? 'img/usr/6/'+n+'.png' :
+  (e.pageX>(y+50) && e.pageY<x)      ? 'img/usr/5/'+n+'.png' :
+  (e.pageX<y && e.pageY<x)           ? 'img/usr/4/'+n+'.png' :
+  (e.pageX>(y+50) && e.pageY>x)      ? 'img/usr/3/'+n+'.png' :
+  (e.pageX<y && e.pageY>x)           ? 'img/usr/2/'+n+'.png' :
+  (e.pageX>y && e.pageY>(x+50))      ? 'img/usr/1/'+n+'.png' :
+  (e.pageX>y && e.pageY<(x+50))      ? 'img/usr/0/'+n+'.png' :
+                                       'img/usr/1/'+n+'.png' ;
+  //document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY; 
+}
