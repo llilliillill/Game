@@ -131,85 +131,81 @@ document.onmousemove = (e) => {
 let p = [0,0];
 let point = document.getElementById('point');
 
-document.body.onclick = function(e){
-  let point = document.getElementById('point');
-  // if(document.getElementById('point')){
-  //   document.getElementById('point').remove();
-  //   clearInterval(z);
-  // }
- 
-  let b = document.createElement('div');
-  b.style.margin = (x+25)+'px 0 0 '+(y+25)+'px';
-  b.style.width = '2px';
-  b.style.height = '2px';
-  b.style.zIndex = 0;
-  b.style.position = 'absolute';
-  b.style.background = 'red';
-  //b.style.transition = '1s ease';
-  b.setAttribute('id', 'point');
-  document.body.append(b);
+document.body.onmousedown = (e) => {
+  let o = setInterval(() => {
 
-  p[0] = (x+25); 
-  p[1] = (y+25);
+    let point = document.getElementById('point');
 
-  if(e.pageY<(x+25) && e.pageX<(y+25)){
-    p[2] = '1'; //alert(' I '); 
-  } else if(e.pageY<(x+25) && e.pageX>(y+25)){
-    p[2] = '2'; //alert(' II ');
-  } else if(e.pageY>(x+25) && e.pageX>(y+25)){
-    p[2] = '3'; //alert(' III ');
-  } else if(e.pageY>(x+25) && e.pageX<(y+25)){
-    p[2] = '4'; //alert(' IV ');
-  }
-
-  let z = setInterval(() => { 
-
-    switch(p[2]){
-      case '1':
-        p[0]--; p[1]--; 
-      break;
-
-      case '2':
-        p[0]--; p[1]++; 
-      break;
-
-      case '3':
-        p[0]++; p[1]++; 
-      break;
-
-      case '4':
-        p[0]++; p[1]--; 
-      break;
-    }
-
-    point.style.margin = p[0]+'px 0 0 '+p[1]+'px';
-
-    let w = document.elementFromPoint(point.getBoundingClientRect().x,point.getBoundingClientRect().y);
-
-    if(point.getBoundingClientRect().x<50){point.remove();} 
-    if(point.getBoundingClientRect().x>1998){point.remove();}
-    if(point.getBoundingClientRect().y<50){point.remove();} 
-    if(point.getBoundingClientRect().y>1998){point.remove();}
-
-    if(w.classList == 'vrag'){ w.style.display = 'none'; setTimeout(() => { w.style.display = 'block'; }, 3000); point.remove(); }
-    if(w.classList == 'wall'){ point.remove(); }
-
-    // if(Math.abs(p[0]) > Math.abs(p[1])){
-    //   if(p[0] == e.pageX) clearInterval(z);
-    // } else {
-    //   if(p[1] == e.pageY) clearInterval(z);
+    // if(document.getElementById('point')){
+    //   document.getElementById('point').remove();
+    //   clearInterval(z);
     // }
+  
+    let b = document.createElement('div');
+    b.style.margin = (x+25)+'px 0 0 '+(y+25)+'px';
+    b.style.width = '2px';
+    b.style.height = '2px';
+    b.style.zIndex = 0;
+    b.style.position = 'absolute';
+    b.style.background = 'red';
+    b.setAttribute('id', 'point');
+    document.body.append(b);
 
-    //setMenu('x: '+p[0]+' px: '+e.pageX+' | y: '+p[1]+' py: '+e.pageY+' | p2: '+p[2]);
-    //setMenu(document.getElementById('point').getBoundingClientRect().x);
-    //setMenu(w);
-  }, 10);
+    p[0] = (x+25); 
+    p[1] = (y+25);
+    p[2] = 
+    (e.pageY<(x+25) && e.pageX<(y+25)) ? '1' :  
+    (e.pageY<(x+25) && e.pageX>(y+25)) ? '2' : 
+    (e.pageY>(x+25) && e.pageX>(y+25)) ? '3' : 
+    (e.pageY>(x+25) && e.pageX<(y+25)) ? '4' : '' ; 
 
-  setTimeout(() => {
-    // document.getElementById('point').style.margin = e.pageY+'px 0 0 '+e.pageX+'px';
-    // setMenu('x: '+e.pageX+' y: '+e.pageY);
-    clearInterval(z); point.remove();
-  },3000);
+    new Audio('img/fire.mp3').play();
+    
+
+    let z = setInterval(() => { 
+
+      switch(p[2]){
+        case '1': p[0]--; p[1]--; break;
+        case '2': p[0]--; p[1]++; break;
+        case '3': p[0]++; p[1]++; break;
+        case '4': p[0]++; p[1]--; break;
+      }
+
+      point.style.margin = p[0]+'px 0 0 '+p[1]+'px';
+
+      let w = document.elementFromPoint(point.getBoundingClientRect().x,
+                                        point.getBoundingClientRect().y);
+
+      if(point.getBoundingClientRect().x<50){  point.remove();} 
+      if(point.getBoundingClientRect().y<50){  point.remove();} 
+      if(point.getBoundingClientRect().x>1998){point.remove();}
+      if(point.getBoundingClientRect().y>1998){point.remove();}
+
+      /* [ VRAG ] */
+      if(w.classList == 'vrag'){ 
+        w.style.display = 'none'; 
+        setTimeout(() => { 
+          w.style.display = 'block'; 
+        }, 3000); 
+        point.remove(); 
+      }
+
+      /* [ WALL ] */
+      if(w.classList == 'wall'){ 
+        point.remove(); 
+      }
+
+    }, 10);
+
+    setTimeout(() => {
+      clearInterval(z); point.remove();
+    },3000);
+
+  },200);
+
+  document.body.onmouseup = () => {
+    clearInterval(o);
+  }
 
 }
 
