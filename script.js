@@ -128,18 +128,9 @@ document.onmousemove = (e) => {
 
 
 /* [ FIRE ] */
-let p = [0,0];
-let point = document.getElementById('point');
-
+let p = [0,0,0];
 document.body.onmousedown = (e) => {
   let o = setInterval(() => {
-
-    let point = document.getElementById('point');
-
-    // if(document.getElementById('point')){
-    //   document.getElementById('point').remove();
-    //   clearInterval(z);
-    // }
   
     let b = document.createElement('div');
     b.style.margin = (x+25)+'px 0 0 '+(y+25)+'px';
@@ -148,38 +139,45 @@ document.body.onmousedown = (e) => {
     b.style.zIndex = 0;
     b.style.position = 'absolute';
     b.style.background = 'red';
-    b.setAttribute('id', 'point');
     document.body.append(b);
 
     p[0] = (x+25); 
     p[1] = (y+25);
-    p[2] = 
-    (e.pageY<(x+25) && e.pageX<(y+25)) ? '1' :  
-    (e.pageY<(x+25) && e.pageX>(y+25)) ? '2' : 
-    (e.pageY>(x+25) && e.pageX>(y+25)) ? '3' : 
-    (e.pageY>(x+25) && e.pageX<(y+25)) ? '4' : '' ; 
+    p[2] = (e.pageX>(y+50) && e.pageY>(x+50)) ? '1' :
+           (e.pageX<y && e.pageY>(x+50))      ? '2' :
+           (e.pageX>(y+50) && e.pageY<x)      ? '3' :
+           (e.pageX<y && e.pageY<x)           ? '4' :
+           (e.pageX>(y+50) && e.pageY>x)      ? '5' :
+           (e.pageX<y && e.pageY>x)           ? '6' :
+           (e.pageX>y && e.pageY>(x+50))      ? '7' :
+           (e.pageX>y && e.pageY<(x+50))      ? '8' : '' ;
+
+    //setMenu(p[2]);
 
     new Audio('img/fire.mp3').play();
     
-
     let z = setInterval(() => { 
 
       switch(p[2]){
-        case '1': p[0]--; p[1]--; break;
-        case '2': p[0]--; p[1]++; break;
-        case '3': p[0]++; p[1]++; break;
-        case '4': p[0]++; p[1]--; break;
+        case '1':  p[0]++;  p[1]++;  break;
+        case '2':  p[0]++;  p[1]--;  break;
+        case '3':  p[0]--;  p[1]++;  break;
+        case '4':  p[0]--;  p[1]--;  break;
+        case '5': p[0]=p[0]; p[1]++; break;
+        case '6': p[0]=p[0]; p[1]--; break;
+        case '7': p[0]++; p[1]=p[1]; break;
+        case '8': p[0]--; p[1]=p[1]; break;
       }
 
-      point.style.margin = p[0]+'px 0 0 '+p[1]+'px';
+      b.style.margin = p[0]+'px 0 0 '+p[1]+'px';
 
-      let w = document.elementFromPoint(point.getBoundingClientRect().x,
-                                        point.getBoundingClientRect().y);
+      let w = document.elementFromPoint(b.getBoundingClientRect().x,b.getBoundingClientRect().y);
 
-      if(point.getBoundingClientRect().x<50){  point.remove();} 
-      if(point.getBoundingClientRect().y<50){  point.remove();} 
-      if(point.getBoundingClientRect().x>1998){point.remove();}
-      if(point.getBoundingClientRect().y>1998){point.remove();}
+      /* [ ... ] */
+      if(b.getBoundingClientRect().x<50){  b.remove();} 
+      if(b.getBoundingClientRect().y<50){  b.remove();} 
+      if(b.getBoundingClientRect().x>1998){b.remove();}
+      if(b.getBoundingClientRect().y>1998){b.remove();}
 
       /* [ VRAG ] */
       if(w.classList == 'vrag'){ 
@@ -187,30 +185,37 @@ document.body.onmousedown = (e) => {
         setTimeout(() => { 
           w.style.display = 'block'; 
         }, 3000); 
-        point.remove(); 
+        b.remove(); 
       }
 
       /* [ WALL ] */
       if(w.classList == 'wall'){ 
-        point.remove(); 
+        b.remove(); 
+      }
+
+      /* [ WALL (WHITE) ] */
+      if(w.classList == 'wall' && w.style.background == 'white'){
+        w.style.border = '1px solid orange'; 
+        w.style.background = 'orange';
+        w.style.transition = '1s ease';
+        setTimeout(() => { 
+          w.style.background = 'white';
+          w.style.border = '1px solid gray'; 
+        }, 3000);
       }
 
     }, 10);
 
     setTimeout(() => {
-      clearInterval(z); point.remove();
-    },3000);
+      clearInterval(z); b.remove();
+    }, 5000);
 
-  },200);
+  }, 100); 
 
-  document.body.onmouseup = () => {
-    clearInterval(o);
+  document.body.onmouseup = () => { 
+    clearInterval(o); 
   }
-
 }
-
-
-
 
 
 /* [ CREATE OBJECT ] */
@@ -228,6 +233,7 @@ function setWall(x,y,z){
 } 
 setWall(600,200,'gray');
 setWall(800,400,'pink');
+setWall(700,250,'white');
 
 /* [ CREATE STAR ] */
 function setStar(x,y){ 
