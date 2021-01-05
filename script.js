@@ -129,6 +129,11 @@ document.onmousemove = (e) => {
 
 /* [ FIRE ] */
 let p = [0,0,0];
+
+let song = 0;
+let audio = new Audio('music/'+random(0,2)+'.mp3');
+audio.volume = '0.2';
+
 document.body.onmousedown = (e) => {
   let o = setInterval(() => {
   
@@ -154,7 +159,9 @@ document.body.onmousedown = (e) => {
 
     //setMenu(p[2]);
 
-    new Audio('img/fire.mp3').play();
+    let fire = new Audio('img/fire.mp3');
+    fire.volume = '0.2';
+    fire.play();
     
     let z = setInterval(() => { 
 
@@ -189,7 +196,7 @@ document.body.onmousedown = (e) => {
       }
 
       /* [ WALL ] */
-      if(w.classList == 'wall'){ 
+      if(w.classList == 'wall' || w.classList == 'block'){ 
         b.remove(); 
       }
 
@@ -197,11 +204,30 @@ document.body.onmousedown = (e) => {
       if(w.classList == 'wall' && w.style.background == 'white'){
         w.style.border = '1px solid orange'; 
         w.style.background = 'orange';
-        w.style.transition = '1s ease';
+        w.style.transition = '2s ease';
+        setTimeout(() => { 
+          w.style.background = 'red';
+          w.style.border = '1px solid red'; 
+          w.style.transition = '3s ease';
+        }, 3000);
         setTimeout(() => { 
           w.style.background = 'white';
           w.style.border = '1px solid gray'; 
-        }, 3000);
+          w.style.transition = '4s ease';
+        }, 7000);
+      }
+
+      /* [ WALL (GREENYELLOW) ] */
+      if(w.classList == 'wall' && w.style.border == '1px solid orange'){
+        if(!song){ 
+          audio.play();
+          song = 1; 
+        } else { 
+          audio.pause(); 
+          audio = new Audio('music/'+random(0,3)+'.mp3');
+          audio.volume = '0.2';
+          song = 0; 
+        }
       }
 
     }, 10);
@@ -218,8 +244,8 @@ document.body.onmousedown = (e) => {
 }
 
 
-/* [ CREATE OBJECT ] */
-function setWall(x,y,z){
+/* [ CREATE WALL ] */
+function createWall(x,y,z){
   let a = document.createElement('img');
   a.style.margin = y+'px 0 0 '+x+'px';
   a.style.border = '1px solid black';
@@ -227,16 +253,34 @@ function setWall(x,y,z){
   a.style.zIndex = 1;
   a.style.width = '50px';
   a.style.height = '50px';
-  if(z){a.style.background = z;}
+  a.style.background = (z) ? z : 'gray';
   a.setAttribute('class', 'wall');
   document.body.append(a);
 } 
-setWall(600,200,'gray');
-setWall(800,400,'pink');
-setWall(700,250,'white');
+createWall(600,200);
+createWall(800,400,'pink');
+createWall(700,250,'white');
+
+
+
+/* [ CREATE SONG ] */
+function createSong(x,y){
+  let a = document.createElement('img');
+  a.style.margin = y+'px 0 0 '+x+'px';
+  a.style.border = '1px solid orange';
+  a.style.position = 'absolute';
+  a.style.zIndex = 1;
+  a.style.width = '50px';
+  a.style.height = '50px';
+  a.src = 'music/music.png';
+  a.setAttribute('class', 'wall');
+  document.body.append(a);
+} createSong(800,330);
+
+
 
 /* [ CREATE STAR ] */
-function setStar(x,y){ 
+function createStar(x,y){ 
   setTimeout(() => {
     let a = document.createElement('img');
     a.style.border = '2px solid orange';
@@ -254,8 +298,28 @@ function setStar(x,y){
     document.body.append(a);
   }, 1000); 
 } 
-//setStar(100,300);
-//setStar(400,600);
+//createStar(100,300);
+//createStar(400,600);
+
+/* [ CREATE BLOCK ] */
+let block = [[300,200,'brown'],[400,200,'black']];
+function createBlock(z){
+  for(let i=0; i<z.length; i++){
+    let a = document.createElement('img');
+    a.style.margin = z[i][1]+'px 0 0 '+z[i][0]+'px';
+    a.style.border = '1px solid black';
+    a.style.position = 'absolute';
+    a.style.zIndex = 1;
+    a.style.width = '50px';
+    a.style.height = '50px';
+    a.style.background = (z[i][2]) ? z[i][2] : 'white';
+    a.setAttribute('class', 'block');
+    a.setAttribute('index', i);
+    document.body.append(a);
+  }
+} createBlock(block);
+
+//function setBlock(x,y){};
 
 /* [ MARKER ] */
 function marker(x,y,z){
@@ -353,6 +417,49 @@ function contact(){
       if(lj[7] == '[object HTMLImageElement]'){ y-=2; sx-=2; } else { lj[7] = ''; }
       break;
     }
+
+    /* [ BLOCK ] */
+    if(li[i].classList == 'block'){
+      lj[0] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y-2);
+      lj[1] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y);
+      lj[2] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y-2);
+      lj[3] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y);
+      lj[4] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y+50);
+      lj[5] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y+52);
+      lj[6] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y+52);
+      lj[7] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y+50);
+      let j = li[i].getAttribute('index');
+
+      /* [ LEFT ] */
+      if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
+      || (lj[1] == '[object HTMLImageElement]' && lj[7] == '[object HTMLImageElement]')){
+        block[j][1] = block[j][1];  block[j][0] +=2; 
+        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+      }
+
+      /* [ RIGHT ] */
+      if(lj[3] == '[object HTMLImageElement]' || lj[4] == '[object HTMLImageElement]' 
+      || (lj[3] == '[object HTMLImageElement]' && lj[4] == '[object HTMLImageElement]')){
+        block[j][1] = block[j][1];  block[j][0] -=2; 
+        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+      }
+
+      /* [ TOP ] */
+      if(lj[0] == '[object HTMLImageElement]' || lj[2] == '[object HTMLImageElement]' 
+      || (lj[0] == '[object HTMLImageElement]' && lj[2] == '[object HTMLImageElement]')){
+        block[j][1] +=2; block[j][0] = block[j][0];
+        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+      }
+
+      /* [ BOTTOM ] */
+      if(lj[6] == '[object HTMLImageElement]' || lj[5] == '[object HTMLImageElement]' 
+      || (lj[6] == '[object HTMLImageElement]' && lj[5] == '[object HTMLImageElement]')){
+        block[j][1] -=2; block[j][0] = block[j][0];
+        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+      }
+    
+      break;
+    }
   }
   window.scroll(sx,sy); u.style.margin = x+'px 0 0 '+y+'px';
 }
@@ -362,10 +469,10 @@ let a = 0; let b = 0;
 let c = 0; let d = 0;
 document.onkeydown = function(e){
   switch(e.code){
-    case 'KeyW': if(!a){ a = setInterval(() => { contact(); x-=2; sy-=2; }, 10); anim(e); } break;
-    case 'KeyS': if(!a){ a = setInterval(() => { contact(); x+=2; sy+=2; }, 10); anim(e); } break;
-    case 'KeyA': if(!b){ b = setInterval(() => { contact(); y-=2; sx-=2; }, 10); anim(e); } break;
-    case 'KeyD': if(!b){ b = setInterval(() => { contact(); y+=2; sx+=2; }, 10); anim(e); } break;
+    case 'KeyW': if(!a){ a = setInterval(() => { contact(); x-=2; sy-=2; }, 10); anim(e); } break; //sy-=2;
+    case 'KeyS': if(!a){ a = setInterval(() => { contact(); x+=2; sy+=2; }, 10); anim(e); } break; //sy+=2;
+    case 'KeyA': if(!b){ b = setInterval(() => { contact(); y-=2; sx-=2; }, 10); anim(e); } break; //sx-=2;
+    case 'KeyD': if(!b){ b = setInterval(() => { contact(); y+=2; sx+=2; }, 10); anim(e); } break; //sx+=2;
   }
 }
 document.onkeyup = function(e){
