@@ -17,7 +17,7 @@ let sx = 0;
 let sy = 0; 
 
 /* [ ... ] */
-let score = [0]; 
+let score = [0,0]; 
 
 /* [ RANDOM ] */
 function random(min,max){
@@ -25,7 +25,7 @@ function random(min,max){
 }
 
 /* [ MENU ] */
-function setMenu(x){
+function setMenu(x,z){
   if(document.getElementById('menu')){
   document.getElementById('menu').remove();}
   let a = document.createElement('div');
@@ -37,8 +37,9 @@ function setMenu(x){
   a.style.textAlign = 'center';
   a.style.lineHeight = '1.8';
   a.style.background = 'whitesmoke';
-  a.style.border = '1px solid green';
-  a.innerHTML = '<b style="color:green;">'+x+'</b>';
+  a.style.border = (z) ? '1px solid '+z : '1px solid green';
+  a.innerHTML = (z) ? '<b style="color:'+z+';">'+
+  x+'</b>' : '<b style="color:green;">'+x+'</b>';
   document.body.append(a);
   setTimeout(() => { a.remove(); }, 9000);
 } 
@@ -72,17 +73,16 @@ document.body.append(u);
 
 /* [ CREATE VRAG ] */
 let v = {
-  0: [[300,450, ''],[600,450, ''],
-      [900,200, ''],[1200,200,''],
-      [1100,450,''],[1200,550,'']],
+  0: [[300,280, 'orange',[],[]],[500,450, 'blue',[],[]],
+      [450,150, 'green', [],[]],[150,500, '',    [],[]]],
   1:  [0,1],
-  2: document.getElementsByClassName('vrag')
+  2: document.getElementsByClassName('vrag'),
 }; 
 
 for(let i=0; i<v[0].length; i++){
   let vrg = document.createElement('img');
   vrg.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
-  vrg.style.border = (v[0][i][2]!='') ? '1px solid '+v[0][i][2] : '1px solid red';
+  vrg.style.border = (v[0][i][2] != '') ? '1px solid '+v[0][i][2] : '1px solid red';
   vrg.style.position = 'absolute';
   vrg.style.zIndex = 1;
   vrg.style.width = '50px';
@@ -95,6 +95,113 @@ for(let i=0; i<v[0].length; i++){
 function run(){
     let a = setInterval(() => {
       for(let i=0; i<v[0].length; i++){
+        v[0][i][3][0] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y-2);
+        v[0][i][3][1] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y);
+        v[0][i][3][2] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y-2);
+        v[0][i][3][3] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y);
+        v[0][i][3][4] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y+50);
+        v[0][i][3][5] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y+52);
+        v[0][i][3][6] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y+52);
+        v[0][i][3][7] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y+50);
+        
+        /* [ ... ] */
+        if(v[0][i][0]<50){v[0][i][0]+=2;} if(v[0][i][0]>1998){v[0][i][0]-=2;}
+        if(v[0][i][1]<50){v[0][i][1]+=2;} if(v[0][i][1]>1998){v[0][i][1]-=2;}
+
+        for(let j=0; j<v[0][i][3].length; j++){
+
+          /* [ STAR ] */
+          if(v[0][i][3][j].classList == 'star'){
+            createStar(parseInt(v[0][i][3][j].getAttribute('x')),
+                       parseInt(v[0][i][3][j].getAttribute('y')));
+            v[0][i][3][j].remove(); 
+            let star = new Audio('img/star.mp3');
+            star.volume = '0.2';
+            star.play();
+            score[0]++; setMenu('+'+score[0]+' star'); break;
+          }
+
+          /* [ WALL ] */
+          if(v[0][i][3][j].classList == 'wall'){
+            v[0][i][4][0] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y-2);
+            v[0][i][4][1] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y);
+            v[0][i][4][2] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y-2);
+            v[0][i][4][3] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y);
+            v[0][i][4][4] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y+50);
+            v[0][i][4][5] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y+52);
+            v[0][i][4][6] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y+52);
+            v[0][i][4][7] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y+50);
+
+            /* [ LEFT ] */
+            if(v[0][i][4][1] == '[object HTMLImageElement]' || v[0][i][4][7] == '[object HTMLImageElement]' 
+            || (v[0][i][4][1] == '[object HTMLImageElement]' && v[0][i][4][7] == '[object HTMLImageElement]')){
+              v[0][i][0] = v[0][i][0]; v[0][i][1]-=2; 
+            }
+
+            /* [ RIGHT ] */
+            if(v[0][i][4][3] == '[object HTMLImageElement]' || v[0][i][4][4] == '[object HTMLImageElement]' 
+            || (v[0][i][4][3] == '[object HTMLImageElement]' && v[0][i][4][4] == '[object HTMLImageElement]')){
+              v[0][i][0] = v[0][i][0];  v[0][i][1]+=2; 
+            }
+
+            /* [ TOP ] */
+            if(v[0][i][4][0] == '[object HTMLImageElement]' || v[0][i][4][2] == '[object HTMLImageElement]' 
+            || (v[0][i][4][0] == '[object HTMLImageElement]' && v[0][i][4][2] == '[object HTMLImageElement]')){
+              v[0][i][0]-=2; v[0][i][1] = v[0][i][1]; 
+            }
+
+            /* [ BOTTOM ] */
+            if(v[0][i][4][6] == '[object HTMLImageElement]' || v[0][i][4][5] == '[object HTMLImageElement]' 
+            || (v[0][i][4][6] == '[object HTMLImageElement]' && v[0][i][4][5] == '[object HTMLImageElement]')){
+              v[0][i][0]+=2; v[0][i][1] = v[0][i][1]; 
+            }
+
+            break;
+          }
+
+          /* [ BLOCK ] */
+          if(v[0][i][3][j].classList == 'block'){
+            v[0][i][4][0] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y-2);
+            v[0][i][4][1] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y);
+            v[0][i][4][2] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y-2);
+            v[0][i][4][3] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y);
+            v[0][i][4][4] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y+50);
+            v[0][i][4][5] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y+52);
+            v[0][i][4][6] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y+52);
+            v[0][i][4][7] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y+50);
+            let k = v[0][i][3][j].getAttribute('index');
+
+            /* [ LEFT ] */
+            if(v[0][i][4][1] == '[object HTMLImageElement]' || v[0][i][4][7] == '[object HTMLImageElement]' 
+            || (v[0][i][4][1] == '[object HTMLImageElement]' && v[0][i][4][7] == '[object HTMLImageElement]')){
+              block[k][1] = block[k][1];  block[k][0] +=2;
+              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+
+            /* [ RIGHT ] */
+            if(v[0][i][4][3] == '[object HTMLImageElement]' || v[0][i][4][4] == '[object HTMLImageElement]' 
+            || (v[0][i][4][3] == '[object HTMLImageElement]' && v[0][i][4][4] == '[object HTMLImageElement]')){
+              block[k][1] = block[k][1];  block[k][0] -=2;
+              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+
+            /* [ TOP ] */
+            if(v[0][i][4][0] == '[object HTMLImageElement]' || v[0][i][4][2] == '[object HTMLImageElement]' 
+            || (v[0][i][4][0] == '[object HTMLImageElement]' && v[0][i][4][2] == '[object HTMLImageElement]')){
+              block[k][1] +=2; block[k][0] = block[k][0];
+              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+
+            /* [ BOTTOM ] */
+            if(v[0][i][4][6] == '[object HTMLImageElement]' || v[0][i][4][5] == '[object HTMLImageElement]' 
+            || (v[0][i][4][6] == '[object HTMLImageElement]' && v[0][i][4][5] == '[object HTMLImageElement]')){
+              block[k][1] -=2; block[k][0] = block[k][0];
+              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+            break;
+          }
+        }
+
         if(v[1][1]){
           v[0][i][0]+=2; 
           v[0][i][1]-=2; 
@@ -193,6 +300,7 @@ document.body.onmousedown = (e) => {
       /* [ VRAG ] */
       if(w.classList == 'vrag'){ 
         w.style.display = 'none'; 
+        score[1]++; setMenu('+'+score[1]+' kill','red');
         setTimeout(() => { 
           w.style.display = 'block'; 
         }, 3000); 
@@ -205,11 +313,13 @@ document.body.onmousedown = (e) => {
       }
 
       /* [ WALL (WHITE) ] */
+      let color = ['orange','red','green','blue','pink',
+      'brown','black','greenyellow','yellow','gray'];
       if(w.classList == 'wall' && w.style.background == 'white'){ 
-        w.style.background = 'orange';
+        w.style.background = color[random(0,9)];
         w.style.transition = '2s ease';
         setTimeout(() => { 
-          w.style.background = 'red';
+          w.style.background = color[random(0,9)];
           w.style.transition = '3s ease';
         }, 3000);
         setTimeout(() => { 
@@ -410,15 +520,6 @@ function contact(){
       lj[6] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y+52);
       lj[7] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y+50);
 
-      // if(lj[0] == '[object HTMLImageElement]'){ x-=2; sy-=2; } else { lj[0] = ''; }
-      // if(lj[1] == '[object HTMLImageElement]'){ y-=2; sx-=2; } else { lj[1] = ''; }
-      // if(lj[2] == '[object HTMLImageElement]'){ x-=2; sy-=2; } else { lj[2] = ''; }
-      // if(lj[3] == '[object HTMLImageElement]'){ y+=2; sx+=2; } else { lj[3] = ''; }
-      // if(lj[4] == '[object HTMLImageElement]'){ y+=2; sx+=2; } else { lj[4] = ''; }
-      // if(lj[5] == '[object HTMLImageElement]'){ x+=2; sy+=2; } else { lj[5] = ''; }
-      // if(lj[6] == '[object HTMLImageElement]'){ x+=2; sy+=2; } else { lj[6] = ''; }
-      // if(lj[7] == '[object HTMLImageElement]'){ y-=2; sx-=2; } else { lj[7] = ''; }
-
       /* [ LEFT ] */
       if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
       || (lj[1] == '[object HTMLImageElement]' && lj[7] == '[object HTMLImageElement]')){
@@ -516,12 +617,6 @@ document.onkeyup = function(e){
 /* [ ANIMATION ] */
 let n = 0; let r = 0;
 function anim(e){
-  // if(c == '' || d == ''){ if(c != '' && e.code != c){
-  //   if(c != d){ if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ d = e.code; } }
-  // } else {
-  //   if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ c = e.code; }
-  // }}
-
   if((c == '' || d == '') && (c != '' && e.code != c)){
     if(c != d && e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ d = e.code; }
   } else {
