@@ -14,7 +14,7 @@
       margin: 0;
       padding: 0;
     }
-    #cude{
+    /* #cude{
       border: 2px solid gray;
       border-top: 2px solid green;
       border-right: 2px solid green;
@@ -23,30 +23,30 @@
       height: 50px;
       margin: 200px 0 0 650px;
       z-index: 1;
-    }
+    } */
   </style>
 
   <script>
-    function setMenu(x){
-      if(document.getElementById('menu')){
-      document.getElementById('menu').remove();}
-      let a = document.createElement('div');
-      a.setAttribute('id', 'menu');
-      a.style.width = '100%';
-      a.style.zIndex = '2';
-      a.style.position = 'fixed';
-      a.style.height = '30px';
-      a.style.textAlign = 'center';
-      a.style.lineHeight = '1.8';
-      a.style.background = 'whitesmoke';
-      a.style.border = '1px solid green';
-      a.innerHTML = '<b style="color:green;">'+x+'</b>';
-      document.body.append(a);
-      setTimeout(() => { a.remove(); }, 1000);
-    } 
+    // function setMenu(x){
+    //   if(document.getElementById('menu')){
+    //   document.getElementById('menu').remove();}
+    //   let a = document.createElement('div');
+    //   a.setAttribute('id', 'menu');
+    //   a.style.width = '100%';
+    //   a.style.zIndex = '2';
+    //   a.style.position = 'fixed';
+    //   a.style.height = '30px';
+    //   a.style.textAlign = 'center';
+    //   a.style.lineHeight = '1.8';
+    //   a.style.background = 'whitesmoke';
+    //   a.style.border = '1px solid green';
+    //   a.innerHTML = '<b style="color:green;">'+x+'</b>';
+    //   document.body.append(a);
+    //   setTimeout(() => { a.remove(); }, 1000);
+    // } 
 
     /* [ INFO ] */
-    function setInfo(){
+    //function setInfo(){
       let a = document.getElementById('info');
       a.style.width = '100%';
       a.style.height = '30px';
@@ -56,52 +56,105 @@
       a.style.lineHeight = '1.8';
       a.style.background = 'whitesmoke';
       a.style.border = '1px solid black';
-    } setInfo();
+    //} setInfo();
 
     /* [ MOUSEMARCER ] */
-    document.body.onclick = function(e){
-      let a = document.createElement('div');
-      a.style.margin = (e.clientY-13)+'px 0 0 '
-                      +(e.clientX+1)+'px';
-      a.style.zIndex = 4;
-      a.style.width = '60px';
-      a.style.height = '12px';
-      a.style.fontSize = '10px';
-      a.style.textAlign = 'center';
-      a.style.position = 'absolute';
-      a.style.border = '1px solid black';
-      a.style.background = 'whitesmoke';
-      a.setAttribute('class', 'mousemarker');
-      a.innerHTML = 'x: '+e.clientX+' y: '+e.clientY;
-      document.body.append(a);
+    // document.body.onclick = function(e){
+    //   let a = document.createElement('div');
+    //   a.style.margin = (e.clientY-13)+'px 0 0 '
+    //                         +(e.clientX+1)+'px';
+    //   a.style.zIndex = 4;
+    //   a.style.width = '60px';
+    //   a.style.height = '12px';
+    //   a.style.fontSize = '10px';
+    //   a.style.textAlign = 'center';
+    //   a.style.position = 'absolute';
+    //   a.style.border = '1px solid black';
+    //   a.style.background = 'whitesmoke';
+    //   a.innerHTML = 'x: '+e.clientX+' y: '+e.clientY;
+    //   document.body.append(a);
 
-      let b = document.createElement('div');
-      b.style.margin = e.clientY+'px 0 0 '+e.clientX+'px';
-      b.style.zIndex = 4;
-      b.style.width = '2px';
-      b.style.height = '2px';
-      b.style.background = 'red';
-      b.style.position = 'absolute';
-      b.setAttribute('class', 'pointmarker');
-      document.body.append(b);
+    //   let b = document.createElement('div');
+    //   b.style.margin = e.clientY+'px 0 0 '+e.clientX+'px';
+    //   b.style.zIndex = 4;
+    //   b.style.width = '2px';
+    //   b.style.height = '2px';
+    //   b.style.background = 'red';
+    //   b.style.position = 'absolute';
+    //   document.body.append(b);
 
-      setTimeout(() => { 
-        a.remove(); b.remove(); 
-      }, 3000);
+    //   setTimeout(() => {
+    //     a.remove(); b.remove();
+    //   }, 3000);
+    // }
+
+    /* [ ... ] */
+    // document.onmousemove = (e) => {
+    //   document.getElementById('info').innerHTML = ' x: '+e.pageX+' y: '+e.pageY;
+    // }
+
+
+    // document.onclick = (e) => {
+    //   marker(e.pageX,e.pageY);
+
+    //   /* [ x1,y1,x2,y2 ] */
+    //   let a = [600,250,e.pageX,e.pageY];
+
+    //   /* [ ДЛИННА ОТРЕЗКА ] */
+    //   d = Math.sqrt(Math.pow((a[2]-a[0]),2)+Math.pow((a[3]-a[1]),2));
+
+    //   document.getElementById('info').innerHTML = d;
+    // }
+
+    //document.getElementById('info').innerHTML = Math.sqrt(20000);
+
+    let x1 = 600; let y1 = 250;
+    marker(x1,y1,'green');
+    
+    document.onclick = (e) => {
+
+      let inter = setInterval(() => {
+        /*[ ДЛЯ I ЧЕТВЕРТИ ]*/
+        if(x1>y1){
+          k = x1/y1;
+          if(x1 > e.pageX){ x1-=(5*k); } 
+          if(y1 > e.pageY){ y1-=5; } 
+        } else {
+          k = y1/x1;
+          if(x1 > e.pageX){ x1-=5; } 
+          if(y1 > e.pageY){ y1-=(5*k); } 
+        }
+        marker(x1,y1);
+        document.getElementById('info').innerHTML = ' x1: '+x1+' y1: '+y1;
+      },100);
+
     }
+    
+
 
     /* [ MARCER ] */
-    function marker(x,y,z){
+    function marker(x,y){
       let a = document.createElement('div');
       a.style.margin = y+'px 0 0 '+x+'px';
       a.style.width = '2px';
       a.style.height = '2px';
       a.style.background = 'red';
-      if(z){a.style.background = z;}
       a.style.position = 'absolute';
       a.style.zIndex = 3;
       document.body.append(a);
     } 
+
+   
+    function point(z){
+      let a = document.createElement('div');
+      a.style.margin = y+'px 0 0 '+x+'px';
+      a.style.width = '2px';
+      a.style.height = '2px';
+      a.style.background = (z) ? z : 'red';
+      a.style.position = 'absolute';
+      a.style.zIndex = 3;
+      document.body.append(a);
+    } point();
 
     /* [ ... ] */
     // var x = 650;

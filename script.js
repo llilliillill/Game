@@ -2,7 +2,11 @@
 document.body.style.overflow = 'hidden';
 
 /* [ ЗАПРЕТИТЬ ONCONTEXTMENU ] */
-document.oncontextmenu = function(){ sx=0; sy=0; window.scroll(0,0); document.location = 'index.html'; return false; }
+document.oncontextmenu = function(){ 
+  sx=0; sy=0; window.scroll(0,0); 
+  document.location = 'index.html'; 
+  return false; 
+}
 
 /* [ ... ] */
 let x = 200; 
@@ -64,59 +68,60 @@ u.src = 'img/usr/1/0.png';
 u.setAttribute('id', 'user');
 document.body.append(u);
 
+
+
 /* [ CREATE VRAG ] */
-function setVrag(x,y){
-  let a = document.createElement('img');
-  a.style.margin = x+'px 0 0 '+y+'px';
-  a.style.border = '1px solid red';
-  a.style.position = 'absolute';
-  a.style.zIndex = 1;
-  a.style.width = '50px';
-  a.style.height = '50px';
-  a.src = 'img/usr/1/0.png';
-  a.setAttribute('class', 'vrag');
-  document.body.append(a);
-} 
+let v = {
+  0: [[300,450, ''],[600,450, ''],
+      [900,200, ''],[1200,200,''],
+      [1100,450,''],[1200,550,'']],
+  1:  [0,1],
+  2: document.getElementsByClassName('vrag')
+}; 
 
-let il = [450,300,450,600]; let m = 0; let g = 1;
-let v = document.getElementsByClassName('vrag');
-setVrag(il[0],il[1]); setVrag(il[2],il[3]);
+for(let i=0; i<v[0].length; i++){
+  let vrg = document.createElement('img');
+  vrg.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
+  vrg.style.border = (v[0][i][2]!='') ? '1px solid '+v[0][i][2] : '1px solid red';
+  vrg.style.position = 'absolute';
+  vrg.style.zIndex = 1;
+  vrg.style.width = '50px';
+  vrg.style.height = '50px';
+  vrg.src = 'img/usr/1/0.png';
+  vrg.setAttribute('class', 'vrag');
+  document.body.append(vrg);
+}
 
-function ii(){
-  if(g){
+function run(){
     let a = setInterval(() => {
-      il[0]-=2; il[1]+=2; v[0].style.margin = il[0]+'px 0 0 '+il[1]+'px';
-      v[0].src = 'img/usr/5/'+m+'.png'; (m<4) ? m++ : m = 0;
-
-      il[2]-=2; il[3]+=2; v[1].style.margin = il[2]+'px 0 0 '+il[3]+'px';
-      v[1].src = 'img/usr/5/'+m+'.png'; (m<4) ? m++ : m = 0;
+      for(let i=0; i<v[0].length; i++){
+        if(v[1][1]){
+          v[0][i][0]+=2; 
+          v[0][i][1]-=2; 
+          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
+                                +v[0][i][0]+'px';
+          v[2][i].src = 'img/usr/5/'+v[1][0]+'.png'; 
+          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0;
+        } else {
+          v[0][i][0]-=2; 
+          v[0][i][1]+=2;  
+          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
+                               + v[0][i][0]+'px';
+          v[2][i].src = 'img/usr/6/'+v[1][0]+'.png'; 
+          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0; 
+        }
+      }
     }, 80);
 
     setTimeout(() => {
       clearInterval(a);
-      v[0].src = 'img/usr/1/'+m+'.png';
-      v[1].src = 'img/usr/1/'+m+'.png';
-      g = 0; ii();
+      for(let i=0; i<v[0].length; i++){
+      v[2][i].src = 'img/usr/1/'+v[1][0]+'.png';}
+      v[1][1] = (v[1][1]) ? v[1][1] = 0 : v[1][1] = 1; run(); 
     }, 5000);
-   
-  } else {
-    let a = setInterval(() => { 
-      il[0]+=2; il[1]-=2; v[0].style.margin = il[0]+'px 0 0 '+il[1]+'px';
-      v[0].src = 'img/usr/6/'+m+'.png'; (m<4) ? m++ : m = 0; 
 
-      il[2]+=2; il[3]-=2; v[1].style.margin = il[2]+'px 0 0 '+il[3]+'px';
-      v[1].src = 'img/usr/6/'+m+'.png'; (m<4) ? m++ : m = 0; 
-    }, 80);
+} run();
 
-    setTimeout(() => {
-      clearInterval(a);
-      v[0].src = 'img/usr/1/'+m+'.png'; 
-      v[1].src = 'img/usr/1/'+m+'.png'; 
-      g = 1; ii();
-    }, 5000);
-   
-  }
-} ii();
 
 
 
@@ -135,6 +140,7 @@ let audio = new Audio('music/'+random(0,2)+'.mp3');
 audio.volume = '0.2';
 
 document.body.onmousedown = (e) => {
+  u.src = 'img/usr/8/0.png';
   let o = setInterval(() => {
   
     let b = document.createElement('div');
@@ -156,8 +162,6 @@ document.body.onmousedown = (e) => {
            (e.pageX<y && e.pageY>x)           ? '6' :
            (e.pageX>y && e.pageY>(x+50))      ? '7' :
            (e.pageX>y && e.pageY<(x+50))      ? '8' : '' ;
-
-    //setMenu(p[2]);
 
     let fire = new Audio('img/fire.mp3');
     fire.volume = '0.2';
@@ -201,18 +205,15 @@ document.body.onmousedown = (e) => {
       }
 
       /* [ WALL (WHITE) ] */
-      if(w.classList == 'wall' && w.style.background == 'white'){
-        w.style.border = '1px solid orange'; 
+      if(w.classList == 'wall' && w.style.background == 'white'){ 
         w.style.background = 'orange';
         w.style.transition = '2s ease';
         setTimeout(() => { 
           w.style.background = 'red';
-          w.style.border = '1px solid red'; 
           w.style.transition = '3s ease';
         }, 3000);
         setTimeout(() => { 
           w.style.background = 'white';
-          w.style.border = '1px solid gray'; 
           w.style.transition = '4s ease';
         }, 7000);
       }
@@ -224,7 +225,7 @@ document.body.onmousedown = (e) => {
           song = 1; 
         } else { 
           audio.pause(); 
-          audio = new Audio('music/'+random(0,3)+'.mp3');
+          audio = new Audio('music/'+random(0,4)+'.mp3');
           audio.volume = '0.2';
           song = 0; 
         }
@@ -259,7 +260,10 @@ function createWall(x,y,z){
 } 
 createWall(600,200);
 createWall(800,400,'pink');
-createWall(700,250,'white');
+
+createWall(595,350,'white');
+createWall(650,550,'white');
+createWall(705,255,'white');
 
 
 
@@ -275,7 +279,7 @@ function createSong(x,y){
   a.src = 'music/music.png';
   a.setAttribute('class', 'wall');
   document.body.append(a);
-} createSong(800,330);
+} createSong(800,310);
 
 
 
@@ -298,11 +302,16 @@ function createStar(x,y){
     document.body.append(a);
   }, 1000); 
 } 
-//createStar(100,300);
-//createStar(400,600);
+createStar(100,300);
+createStar(400,600);
+createStar(800,900);
+
 
 /* [ CREATE BLOCK ] */
-let block = [[300,200,'brown'],[400,200,'black']];
+let block = [[300,200,'brown'],
+             [400,200,'black'],
+             [900,260,'greenyellow'],
+             [1000,260,'yellow']];
 function createBlock(z){
   for(let i=0; i<z.length; i++){
     let a = document.createElement('img');
@@ -319,8 +328,6 @@ function createBlock(z){
   }
 } createBlock(block);
 
-//function setBlock(x,y){};
-
 /* [ MARKER ] */
 function marker(x,y,z){
   let a = document.createElement('div');
@@ -335,7 +342,7 @@ function marker(x,y,z){
 } //marker(200,100,'green');
 
 /* [ MOUSEMARCER ] */
-// document.body.onclick = function(e){
+// document.body.onclick = (e) => {
 //   let a = document.createElement('div');
 //   a.style.margin = (sy+e.clientY-13)+'px 0 0 '
 //                         +(sx+e.clientX+1)+'px';
@@ -365,13 +372,6 @@ function marker(x,y,z){
 // }
 
 /* [ ... ] */
-// user.onclick = function(){
-//   window.scroll(scrollX,scrollY);
-//   x = 300; y = 400;
-//   usr.style.margin = x+'px 0 0 '+y+'px';
-// }
-
-/* [ ... ] */
 let li = []; let lj = [];
 function contact(){
   li[0] = document.elementFromPoint(u.getBoundingClientRect().x,u.getBoundingClientRect().y-2);
@@ -391,8 +391,11 @@ function contact(){
 
     /* [ STAR ] */
     if(li[i].classList == 'star'){
-      setStar(parseInt(li[i].getAttribute('x')),parseInt(li[i].getAttribute('y')));
-      li[i].remove(); new Audio('img/star.mp3').play();
+      createStar(parseInt(li[i].getAttribute('x')),parseInt(li[i].getAttribute('y')));
+      li[i].remove(); 
+      let star = new Audio('img/star.mp3');
+      star.volume = '0.2';
+      star.play();
       score[0]++; setMenu('+'+score[0]+' star'); break;
     }
 
@@ -407,14 +410,39 @@ function contact(){
       lj[6] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y+52);
       lj[7] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y+50);
 
-      if(lj[0] == '[object HTMLImageElement]'){ x-=2; sy-=2; } else { lj[0] = ''; }
-      if(lj[1] == '[object HTMLImageElement]'){ y-=2; sx-=2; } else { lj[1] = ''; }
-      if(lj[2] == '[object HTMLImageElement]'){ x-=2; sy-=2; } else { lj[2] = ''; }
-      if(lj[3] == '[object HTMLImageElement]'){ y+=2; sx+=2; } else { lj[3] = ''; }
-      if(lj[4] == '[object HTMLImageElement]'){ y+=2; sx+=2; } else { lj[4] = ''; }
-      if(lj[5] == '[object HTMLImageElement]'){ x+=2; sy+=2; } else { lj[5] = ''; }
-      if(lj[6] == '[object HTMLImageElement]'){ x+=2; sy+=2; } else { lj[6] = ''; }
-      if(lj[7] == '[object HTMLImageElement]'){ y-=2; sx-=2; } else { lj[7] = ''; }
+      // if(lj[0] == '[object HTMLImageElement]'){ x-=2; sy-=2; } else { lj[0] = ''; }
+      // if(lj[1] == '[object HTMLImageElement]'){ y-=2; sx-=2; } else { lj[1] = ''; }
+      // if(lj[2] == '[object HTMLImageElement]'){ x-=2; sy-=2; } else { lj[2] = ''; }
+      // if(lj[3] == '[object HTMLImageElement]'){ y+=2; sx+=2; } else { lj[3] = ''; }
+      // if(lj[4] == '[object HTMLImageElement]'){ y+=2; sx+=2; } else { lj[4] = ''; }
+      // if(lj[5] == '[object HTMLImageElement]'){ x+=2; sy+=2; } else { lj[5] = ''; }
+      // if(lj[6] == '[object HTMLImageElement]'){ x+=2; sy+=2; } else { lj[6] = ''; }
+      // if(lj[7] == '[object HTMLImageElement]'){ y-=2; sx-=2; } else { lj[7] = ''; }
+
+      /* [ LEFT ] */
+      if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
+      || (lj[1] == '[object HTMLImageElement]' && lj[7] == '[object HTMLImageElement]')){
+        x = x;  y-=2; sx-=2;
+      }
+
+      /* [ RIGHT ] */
+      if(lj[3] == '[object HTMLImageElement]' || lj[4] == '[object HTMLImageElement]' 
+      || (lj[3] == '[object HTMLImageElement]' && lj[4] == '[object HTMLImageElement]')){
+        x = x;  y+=2; sx+=2;
+      }
+
+      /* [ TOP ] */
+      if(lj[0] == '[object HTMLImageElement]' || lj[2] == '[object HTMLImageElement]' 
+      || (lj[0] == '[object HTMLImageElement]' && lj[2] == '[object HTMLImageElement]')){
+        x-=2; y = y; sy-=2;
+      }
+
+      /* [ BOTTOM ] */
+      if(lj[6] == '[object HTMLImageElement]' || lj[5] == '[object HTMLImageElement]' 
+      || (lj[6] == '[object HTMLImageElement]' && lj[5] == '[object HTMLImageElement]')){
+        x+=2; y = y; sy+=2;
+      }
+
       break;
     }
 
@@ -433,14 +461,14 @@ function contact(){
       /* [ LEFT ] */
       if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
       || (lj[1] == '[object HTMLImageElement]' && lj[7] == '[object HTMLImageElement]')){
-        block[j][1] = block[j][1];  block[j][0] +=2; 
+        block[j][1] = block[j][1];  block[j][0] +=2;
         li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
       }
 
       /* [ RIGHT ] */
       if(lj[3] == '[object HTMLImageElement]' || lj[4] == '[object HTMLImageElement]' 
       || (lj[3] == '[object HTMLImageElement]' && lj[4] == '[object HTMLImageElement]')){
-        block[j][1] = block[j][1];  block[j][0] -=2; 
+        block[j][1] = block[j][1];  block[j][0] -=2;
         li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
       }
 
@@ -469,10 +497,10 @@ let a = 0; let b = 0;
 let c = 0; let d = 0;
 document.onkeydown = function(e){
   switch(e.code){
-    case 'KeyW': if(!a){ a = setInterval(() => { contact(); x-=2; sy-=2; }, 10); anim(e); } break; //sy-=2;
-    case 'KeyS': if(!a){ a = setInterval(() => { contact(); x+=2; sy+=2; }, 10); anim(e); } break; //sy+=2;
-    case 'KeyA': if(!b){ b = setInterval(() => { contact(); y-=2; sx-=2; }, 10); anim(e); } break; //sx-=2;
-    case 'KeyD': if(!b){ b = setInterval(() => { contact(); y+=2; sx+=2; }, 10); anim(e); } break; //sx+=2;
+    case 'KeyW': if(!a){ a = setInterval(() => { contact(); x-=2; sy-=2; }, 10); anim(e); } break;
+    case 'KeyS': if(!a){ a = setInterval(() => { contact(); x+=2; sy+=2; }, 10); anim(e); } break;
+    case 'KeyA': if(!b){ b = setInterval(() => { contact(); y-=2; sx-=2; }, 10); anim(e); } break;
+    case 'KeyD': if(!b){ b = setInterval(() => { contact(); y+=2; sx+=2; }, 10); anim(e); } break;
   }
 }
 document.onkeyup = function(e){
@@ -488,11 +516,17 @@ document.onkeyup = function(e){
 /* [ ANIMATION ] */
 let n = 0; let r = 0;
 function anim(e){
-  if(c == '' || d == ''){ if(c != '' && e.code != c){
-    if(c != d){ if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ d = e.code; } }
+  // if(c == '' || d == ''){ if(c != '' && e.code != c){
+  //   if(c != d){ if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ d = e.code; } }
+  // } else {
+  //   if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ c = e.code; }
+  // }}
+
+  if((c == '' || d == '') && (c != '' && e.code != c)){
+    if(c != d && e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ d = e.code; }
   } else {
     if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ c = e.code; }
-  }}
+  }
 
   if(c == 'KeyW'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/0/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
   if(c == 'KeyS'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/1/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
