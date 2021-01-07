@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LONG</title>
+  <title>FIRE</title>
 </head>
 <body>
   <div id="info"></div>
@@ -27,6 +27,13 @@
   </style>
 
   <script>
+    /* [ ЗАПРЕТИТЬ ONCONTEXTMENU ] */
+    document.oncontextmenu = function(){ 
+      document.location = 'fire.html'; 
+      return false; 
+    }
+
+
     // function setMenu(x){
     //   if(document.getElementById('menu')){
     //   document.getElementById('menu').remove();}
@@ -144,20 +151,23 @@
 
 
 
-    /* [ ... ] */
+    /* [ РАБОТАЕТ ] */
     let x1 = 0, y1 = 0;
-    marker(x1,y1,'red');     
+    marker(x1,y1,'red');
     
     document.onclick = (e) => {
 
+      /* [ ... ] */
       let fire = new Audio('img/fire.mp3');
-      fire.volume = '0.2';
-      fire.play();
+      fire.volume = '0.2'; fire.play();
 
       /* [ ... ] */
-      let x = x1, y = 0;
-      let x2 = e.pageX, y2 = e.pageY;
-      marker(e.pageX,e.pageY,'green');
+      let x = x1, y = 0, 
+      x2 = (e.pageX-2),
+      y2 = (e.pageY-35);
+
+      /* [ МАРКЕР ] */
+      marker(x2,y2,'green');
 
       /* [ ПУЛЯ ] */
       marker(x1,y1,'red');
@@ -165,15 +175,12 @@
       let k = (y1-y2)/(x1-x2);
 
       let z = setInterval(() => {
-        if(x <= x2){
-          x+=10; y=(k*x);
-          document.getElementsByClassName('marker')[2].style.margin = y+'px 0 0 '+x+'px';
-          document.getElementById('info').innerHTML = ' x: '+x+' y: '+y+' | k: '+k;
+        if(x<=x2){
+          x+=10; y=(k*x); marker(x,y,'red');
         } else {
           clearInterval(z);
         }
-      },100);
-
+      },10);
     }
 
 
