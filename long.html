@@ -88,64 +88,103 @@
     //   }, 3000);
     // }
 
-    /* [ ... ] */
-    // document.onmousemove = (e) => {
-    //   document.getElementById('info').innerHTML = ' x: '+e.pageX+' y: '+e.pageY;
-    // }
 
+    /* [ РАБОТАЕТ ] */
+    // let x1 = 0, y1 = 0;
+    // marker(x1,y1,'red');     
 
+    // let x = x1; let y = 0;
     // document.onclick = (e) => {
-    //   marker(e.pageX,e.pageY);
+    //   /* [ ... ] */
+    //   let x2 = e.pageX, y2 = e.pageY;
+    //   marker(e.pageX,e.pageY,'green');
 
-    //   /* [ x1,y1,x2,y2 ] */
-    //   let a = [600,250,e.pageX,e.pageY];
+    //   let z = setInterval(() => {
+    //     if(x <= x2){
+          
+    //       let k = (y1-y2)/(x1-x2);
+    //       x+=10; y=(k*x);
+          
+    //       marker(x,y,'red');
+    //       document.getElementById('info').innerHTML = ' x: '+x+' y: '+y+' | k: '+k;
+    //     } else {
+    //      clearInterval(z);
+    //     }
+    //   },100);
 
-    //   /* [ ДЛИННА ОТРЕЗКА ] */
-    //   d = Math.sqrt(Math.pow((a[2]-a[0]),2)+Math.pow((a[3]-a[1]),2));
-
-    //   document.getElementById('info').innerHTML = d;
     // }
 
-    //document.getElementById('info').innerHTML = Math.sqrt(20000);
+    /* [ РАБОТАЕТ ] */
+    // let x1 = 0, y1 = 0;
+    // marker(x1,y1,'red');     
+    
+    // document.onclick = (e) => {
+    //   /* [ ... ] */
+    //   let x = x1, y = 0;
+    //   let x2 = e.pageX, y2 = e.pageY;
+    //   marker(e.pageX,e.pageY,'green');
 
-    let x1 = 600; let y1 = 250;
-    marker(x1,y1,'green');
+    //   /* [ ПУЛЯ ] */
+    //   marker(x1,y1,'red');
+
+    //   let k = (y1-y2)/(x1-x2);
+
+    //   let z = setInterval(() => {
+    //     if(x <= x2){
+    //       x+=10; y=(k*x);
+    //       document.getElementsByClassName('marker')[2].style.margin = y+'px 0 0 '+x+'px';
+    //       document.getElementById('info').innerHTML = ' x: '+x+' y: '+y+' | k: '+k;
+    //     } else {
+    //       clearInterval(z);
+    //     }
+    //   },100);
+
+    // }
+
+
+
+
+    /* [ ... ] */
+    let x1 = 0, y1 = 0;
+    marker(x1,y1,'red');     
     
     document.onclick = (e) => {
 
-      let inter = setInterval(() => {
-        /*[ ДЛЯ I ЧЕТВЕРТИ ]*/
-        if(x1>y1){
-          k = x1/y1;
-          if(x1 > e.pageX){ x1-=(5*k); } 
-          if(y1 > e.pageY){ y1-=5; } 
+      let fire = new Audio('img/fire.mp3');
+      fire.volume = '0.2';
+      fire.play();
+
+      /* [ ... ] */
+      let x = x1, y = 0;
+      let x2 = e.pageX, y2 = e.pageY;
+      marker(e.pageX,e.pageY,'green');
+
+      /* [ ПУЛЯ ] */
+      marker(x1,y1,'red');
+
+      let k = (y1-y2)/(x1-x2);
+
+      let z = setInterval(() => {
+        if(x <= x2){
+          x+=10; y=(k*x);
+          document.getElementsByClassName('marker')[2].style.margin = y+'px 0 0 '+x+'px';
+          document.getElementById('info').innerHTML = ' x: '+x+' y: '+y+' | k: '+k;
         } else {
-          k = y1/x1;
-          if(x1 > e.pageX){ x1-=5; } 
-          if(y1 > e.pageY){ y1-=(5*k); } 
+          clearInterval(z);
         }
-        marker(x1,y1);
-        document.getElementById('info').innerHTML = ' x1: '+x1+' y1: '+y1;
       },100);
 
     }
-    
+
+
+
+
+
+
 
 
     /* [ MARCER ] */
-    function marker(x,y){
-      let a = document.createElement('div');
-      a.style.margin = y+'px 0 0 '+x+'px';
-      a.style.width = '2px';
-      a.style.height = '2px';
-      a.style.background = 'red';
-      a.style.position = 'absolute';
-      a.style.zIndex = 3;
-      document.body.append(a);
-    } 
-
-   
-    function point(z){
+    function marker(x,y,z){
       let a = document.createElement('div');
       a.style.margin = y+'px 0 0 '+x+'px';
       a.style.width = '2px';
@@ -153,8 +192,21 @@
       a.style.background = (z) ? z : 'red';
       a.style.position = 'absolute';
       a.style.zIndex = 3;
+      a.setAttribute('class', 'marker');
       document.body.append(a);
-    } point();
+    } 
+
+   
+    // function point(z){
+    //   let a = document.createElement('div');
+    //   a.style.margin = y+'px 0 0 '+x+'px';
+    //   a.style.width = '2px';
+    //   a.style.height = '2px';
+    //   a.style.background = (z) ? z : 'red';
+    //   a.style.position = 'absolute';
+    //   a.style.zIndex = 3;
+    //   document.body.append(a);
+    // } point();
 
     /* [ ... ] */
     // var x = 650;

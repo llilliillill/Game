@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test 2</title>
+</head>
+<body>
+
+  <div class="krug">
+    <div class="tochka"></div>
+  </div>
+  
+
+  <style>
+
+  /* body {
+    margin: 3em;
+  } */
+  
+  .krug{
+    width: 50px;
+    height: 50px;
+    border: 1px solid black;
+    position: relative;
+    margin: 230px auto 0 auto;
+  }
+  .tochka{
+    width: 2px;
+    height: 2px;
+    background: red;
+    position: absolute;
+    margin: 25px 0 0 50px;
+  }
+  </style>
+  <script>
+    document.onmousemove = (e) => {
+      let a = document.querySelector('.krug').getBoundingClientRect();
+      
+      let b = Math.atan2(e.y - (a.top + a.height / 2), e.x - (a.left + a.width / 2));
+
+      document.querySelector('.krug').style.transform = 'rotate('+b+'rad)';
+    }
+
+    let position = 50;
+    document.onclick = (e) => {
+      let x = setInterval(() => {
+        position+=5;
+        document.querySelector('.tochka').style.margin = '25px 0 0 '+position+'px';
+      },100);
+      setTimeout(() => { clearInterval(x) },3000);
+    }
+  </script>
+</body>
+</html>

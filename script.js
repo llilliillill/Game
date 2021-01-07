@@ -82,7 +82,8 @@ let v = {
 for(let i=0; i<v[0].length; i++){
   let vrg = document.createElement('img');
   vrg.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
-  vrg.style.border = (v[0][i][2] != '') ? '1px solid '+v[0][i][2] : '1px solid red';
+  vrg.style.border = (v[0][i][2] != '') ?   
+  '1px solid '+v[0][i][2] : '1px solid red';
   vrg.style.position = 'absolute';
   vrg.style.zIndex = 1;
   vrg.style.width = '50px';
@@ -155,7 +156,6 @@ function run(){
             || (v[0][i][4][6] == '[object HTMLImageElement]' && v[0][i][4][5] == '[object HTMLImageElement]')){
               v[0][i][0]+=2; v[0][i][1] = v[0][i][1]; 
             }
-
             break;
           }
 
