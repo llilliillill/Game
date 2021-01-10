@@ -70,7 +70,6 @@ u.setAttribute('id', 'user');
 document.body.append(u);
 
 
-
 /* [ CREATE VRAG ] */
 let v = {
   0: [[300,280, 'orange',[],[]],[500,450, 'blue',[],[]],
@@ -116,10 +115,10 @@ function run(){
             createStar(parseInt(v[0][i][3][j].getAttribute('x')),
                        parseInt(v[0][i][3][j].getAttribute('y')));
             v[0][i][3][j].remove(); 
-            let star = new Audio('img/star.mp3');
-            star.volume = '0.2';
-            star.play();
-            score[0]++; setMenu('+'+score[0]+' star'); break;
+            let str = new Audio('music/star.mp3');
+            str.volume = '0.2';
+            str.play();
+            break;
           }
 
           /* [ WALL ] */
@@ -231,104 +230,119 @@ function run(){
 
 
 /* [ FIRE ] */
+//   weapon
+// ['пистолет',
+//   'пистолет пулемет',
+//   'автомат',
+//   'пулемет', 
+//   'снайперская винтовка',
+//   'гранатомет', 
+//   'гранаты'];
+
+/* [ КОЛ-ВО ПАТРОНОВ В ОРУЖИИ USERA ] */
+let w = [0, 120, 120, 120, 120, 0, 0];
+
 let p = [0,0];
 let song = 0;
 let audio = new Audio('music/'+random(0,2)+'.mp3');
 audio.volume = '0.2';
 
 document.body.onclick = (e) => {
-  u.src = 'img/usr/8/0.png';
+  /* [ ЕСЛИ ЕСТЬ ПАТРОНЫ ] */
+  if(w[0]>0){
+    let fire = new Audio('music/pistol/0.mp3');
+    fire.volume = '0.2';
+    fire.play();
+    w[0]--;
+    document.getElementById('info').innerHTML = w[0];
 
-  p[0] = x+25;
-  p[1] = y+25;
+    // Анимация выстрела  
+    u.src = 'img/usr/8/0.png';
 
-  let x1 = 0, y1 = 0, 
-  k = (e.pageY-p[1])/(e.pageX-p[0]);
+    p[0] = x+25;
+    p[1] = y+25;
 
-  let b = document.createElement('div');
-  b.style.margin = p[1]+'px 0 0 '+p[0]+'px';
-  b.style.width = '2px';
-  b.style.height = '2px';
-  b.style.zIndex = 0;
-  b.style.position = 'absolute';
-  b.style.background = 'red';
-  document.body.append(b);
+    let x1 = 0, y1 = 0, 
+    k = (e.pageY-p[1])/(e.pageX-p[0]);
 
-  let fire = new Audio('img/fire.mp3');
-  fire.volume = '0.2';
-  fire.play();
+    let b = document.createElement('div');
+    b.style.margin = p[1]+'px 0 0 '+p[0]+'px';
+    b.style.width = '2px';
+    b.style.height = '2px';
+    b.style.zIndex = 0;
+    b.style.position = 'absolute';
+    b.style.background = 'red';
+    document.body.append(b);
 
-  /* [ ... ] */
-  // for(let i=0; i<50; i++){
-  //   (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
-  //   if(y1>-500 && y1<500){ 
-  //     marker((x1+p[0]),(y1+p[1]),'black');
-  //     let w = document.elementFromPoint((x1+p[0]),(y1+p[1]));
-  //   }
-  // }
+    let z = setInterval(() => {
+      (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
+      if(y1>-500 && y1<500){ 
+        
+        b.style.margin = (y1+p[1])+'px 0 0 '+(x1+p[0])+'px';
+        
+        let w = document.elementFromPoint(b.getBoundingClientRect().x,
+                                          b.getBoundingClientRect().y);
 
-  let z = setInterval(() => {
-    (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
-    if(y1>-500 && y1<500){ 
-      
-      b.style.margin = (y1+p[1])+'px 0 0 '+(x1+p[0])+'px';
-      
-      let w = document.elementFromPoint(b.getBoundingClientRect().x,
-                                        b.getBoundingClientRect().y);
+        /* [ ... ] */
+        if(b.getBoundingClientRect().x<50){  b.remove();} 
+        if(b.getBoundingClientRect().y<50){  b.remove();} 
+        if(b.getBoundingClientRect().x>1998){b.remove();}
+        if(b.getBoundingClientRect().y>1998){b.remove();}
 
-      /* [ ... ] */
-      if(b.getBoundingClientRect().x<50){  b.remove();} 
-      if(b.getBoundingClientRect().y<50){  b.remove();} 
-      if(b.getBoundingClientRect().x>1998){b.remove();}
-      if(b.getBoundingClientRect().y>1998){b.remove();}
-
-      /* [ VRAG ] */
-      if(w.classList == 'vrag'){ 
-        w.style.display = 'none'; 
-        score[1]++; setMenu('+'+score[1]+' kill','red');
-        setTimeout(() => { 
-          w.style.display = 'block'; 
-        }, 3000); 
-        b.remove(); 
-      }
-
-      /* [ WALL ] */
-      if(w.classList == 'wall' || w.classList == 'block'){ 
-        b.remove(); 
-      }
-
-      /* [ WALL (WHITE) ] */
-      let color = ['orange','red','green','blue','pink',
-      'brown','black','greenyellow','yellow','gray'];
-      if(w.classList == 'wall' && w.style.background == 'white'){ 
-        w.style.background = color[random(0,9)];
-        w.style.transition = '2s ease';
-        setTimeout(() => { 
-          w.style.background = color[random(0,9)];
-          w.style.transition = '3s ease';
-        }, 3000);
-        setTimeout(() => { 
-          w.style.background = 'white';
-          w.style.transition = '4s ease';
-        }, 7000);
-      }
-
-      /* [ WALL (GREENYELLOW) ] */
-      if(w.classList == 'wall' && w.style.border == '1px solid orange'){
-        if(!song){ 
-          audio.play();
-          song = 1; 
-        } else { 
-          audio.pause(); 
-          audio = new Audio('music/'+random(0,4)+'.mp3');
-          audio.volume = '0.2';
-          song = 0; 
+        /* [ VRAG ] */
+        if(w.classList == 'vrag'){ 
+          w.style.display = 'none'; 
+          //score[1]++; setMenu('+'+score[1]+' kill','red');
+          setTimeout(() => { 
+            w.style.display = 'block'; 
+          }, 3000); 
+          b.remove(); 
         }
-      }
 
-    }
-  },10);
-  setTimeout(() => { clearInterval(z); b.remove(); },3000);
+        /* [ WALL ] */
+        if(w.classList == 'wall' || w.classList == 'block'){ 
+          b.remove(); 
+        }
+
+        /* [ WALL (WHITE) ] */
+        let color = ['orange','red','green','blue','pink',
+        'brown','black','greenyellow','yellow','gray'];
+        if(w.classList == 'wall' && w.style.background == 'white'){ 
+          w.style.background = color[random(0,9)];
+          w.style.transition = '2s ease';
+          setTimeout(() => { 
+            w.style.background = color[random(0,9)];
+            w.style.transition = '3s ease';
+          }, 3000);
+          setTimeout(() => { 
+            w.style.background = 'white';
+            w.style.transition = '4s ease';
+          }, 7000);
+        }
+
+        /* [ WALL (GREENYELLOW) ] */
+        if(w.classList == 'wall' && w.style.border == '1px solid orange'){
+          if(!song){ 
+            audio.play();
+            song = 1; 
+          } else { 
+            audio.pause(); 
+            audio = new Audio('music/'+random(0,4)+'.mp3');
+            audio.volume = '0.2';
+            song = 0; 
+          }
+        }
+
+      }
+    },10);
+    setTimeout(() => { clearInterval(z); b.remove(); },3000);
+
+  /* [ ЕСЛИ НЕТ ПАТРОНОВ ] */
+  } else {
+    let fire = new Audio('music/pistol/1.mp3');
+    fire.volume = '0.2';
+    fire.play();
+  }
 
 }
 
@@ -378,8 +392,8 @@ function createStar(x,y){
     let a = document.createElement('img');
     a.style.border = '2px solid orange';
     a.style.borderRadius = '50%';
-    a.style.margin = random(x,y)+'px 0 0 '
-                      +random(x,y)+'px';
+    a.style.margin = random(y,(y+200))+'px 0 0 '
+                    +random(x,(x+200))+'px';
     a.style.zIndex = 1;
     a.style.position = 'absolute';
     a.style.width = '50px';
@@ -391,9 +405,9 @@ function createStar(x,y){
     document.body.append(a);
   }, 1000); 
 } 
-createStar(100,300);
-createStar(400,600);
-createStar(800,900);
+createStar(150,150);
+createStar(1050,150);
+createStar(1050,450);
 
 
 /* [ CREATE BLOCK ] */
@@ -450,12 +464,24 @@ function contact(){
 
     /* [ STAR ] */
     if(li[i].classList == 'star'){
-      createStar(parseInt(li[i].getAttribute('x')),parseInt(li[i].getAttribute('y')));
+      createStar(parseInt(li[i].getAttribute('x')),
+                 parseInt(li[i].getAttribute('y')));
       li[i].remove(); 
-      let star = new Audio('img/star.mp3');
-      star.volume = '0.2';
-      star.play();
-      score[0]++; setMenu('+'+score[0]+' star'); break;
+
+      /* [ ПОЙМАНА ЗВЕЗДА ] */
+      // let str = new Audio('music/star.mp3');
+      // str.volume = '0.2';
+      // str.play();
+      //score[0]++; 
+      //setMenu('+'+score[0]+' star'); 
+
+      /* [ ДОБАВИТЬ ПОЛЗОВАТЕЛЮ 10 ПАТРОНОВ ] */
+      let fire = new Audio('music/pistol/2.mp3');
+      fire.volume = '0.2';
+      fire.play();
+      if(w[0]<120){ w[0] += 10; }
+      document.getElementById('info').innerHTML = w[0]+' патронов';
+      break;
     }
 
     /* [ WALL ] */
