@@ -3,24 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FIRE 2</title>
+  <title>FIRE 3</title>
 </head>
 <body>
   <div id="info"></div>
   <div id="info2"></div>
   <div id="cude"></div>
+  <div id="map"></div>
 
   <style>
     *{
       margin: 0;
       padding: 0;
     }
+
+    /* [ MAP ] */
+    #map{
+      border: 1px solid red;
+      position: absolute;
+      margin: 50px;
+      width: 2000px;
+      height: 2000px;
+    }
   </style>
 
   <script>
     /* [ ЗАПРЕТИТЬ ONCONTEXTMENU ] */
     document.oncontextmenu = function(){ 
-      document.location = 'fire2.html'; 
+      document.location = 'fire3.html'; 
       return false; 
     }
 
@@ -63,37 +73,53 @@
       document.body.append(a);
     } 
 
+
+
     /* [ РАБОТАЕТ ] */
-    let x1 = 600, y1 = 300;
-    marker(x1,y1,'green');
+    let p = [0,0];
+
+    /* [ ... ] */
+    let x = 200, y = 150;
+
+    /* [ CREATE USER ] */
+    let u = document.createElement('img');
+    u.style.margin = x+'px 0 0 '+y+'px'; 
+    u.style.border = '1px solid black';
+    u.style.position = 'absolute';
+    u.style.zIndex = 1;
+    u.style.width = '50px';
+    u.style.height = '50px';
+    u.src = 'img/usr/1/0.png';
+    u.setAttribute('id', 'user');
+    document.body.append(u);
 
     // let x2 = 600, y2 = 200;
     // marker(x2,y2,'green');
     
-    let n = 0;
     document.onclick = (e) => {
 
-      let x2 = e.pageX, y2 = e.pageY; 
-      marker(x2,y2,'red');
+      p[0] = x-25;
+      p[1] = y+75;
 
-      let x = 0, y = 0, 
-      k = (y2-y1)/(x2-x1);
+      //marker(p[0],p[1],'red');
+      let a = document.createElement('div');
+      a.style.margin = p[1]+'px 0 0 '+p[0]+'px';
+      a.style.width = '2px';
+      a.style.height = '2px';
+      a.style.background = 'red';
+      a.style.position = 'absolute';
+      a.style.zIndex = 3;
+      document.body.append(a);
 
-      // d = Math.sqrt(Math.pow((x2-x1),2)+Math.pow((y2-y1),2));
-      // document.getElementById('info').innerHTML = 'd: '+d;
-      //document.getElementById('info').innerHTML = 'd: '+d+' | x: '+e.pageX+' y: '+e.pageY;
+      marker(e.pageX,e.pageY,'green');
 
-      // let z = setInterval(() => {
-      //   (e.pageX>x1 ? x+=10 : x-=10); y=(k*x);
-      //   marker((x+x1),(y+y1),'black');
-      // },10);
-
-      // setTimeout(() => { clearInterval(z); },100);
+      let x1 = 0, y1 = 0, 
+      k = (e.pageY-p[1])/(e.pageX-p[0]);
 
       for(let i=0; i<20; i++){
-        (e.pageX>x1 ? x+=10 : x-=10 ); y=(k*x);
-        if(y>-200 && y<200){ 
-          marker((x+x1),(y+y1),'black'); 
+        (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
+        if(y1>-200 && y1<200){ 
+          marker((x1+p[0]),(y1+p[1]),'black');  
         }
       }
 
