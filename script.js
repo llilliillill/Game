@@ -79,19 +79,19 @@ let v = {
   2: document.getElementsByClassName('vrag'),
 }; 
 
-// for(let i=0; i<v[0].length; i++){
-//   let vrg = document.createElement('img');
-//   vrg.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
-//   vrg.style.border = (v[0][i][2] != '') ?   
-//   '1px solid '+v[0][i][2] : '1px solid red';
-//   vrg.style.position = 'absolute';
-//   vrg.style.zIndex = 1;
-//   vrg.style.width = '50px';
-//   vrg.style.height = '50px';
-//   vrg.src = 'img/usr/1/0.png';
-//   vrg.setAttribute('class', 'vrag');
-//   document.body.append(vrg);
-// }
+for(let i=0; i<v[0].length; i++){
+  let vrg = document.createElement('img');
+  vrg.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
+  vrg.style.border = (v[0][i][2] != '') ?   
+  '1px solid '+v[0][i][2] : '1px solid red';
+  vrg.style.position = 'absolute';
+  vrg.style.zIndex = 1;
+  vrg.style.width = '50px';
+  vrg.style.height = '50px';
+  vrg.src = 'img/usr/1/0.png';
+  vrg.setAttribute('class', 'vrag');
+  document.body.append(vrg);
+}
 
 function run(){
     let a = setInterval(() => {
@@ -231,132 +231,7 @@ function run(){
 
 
 /* [ FIRE ] */
-// let p = [0,0,0];
-
-// let song = 0;
-// let audio = new Audio('music/'+random(0,2)+'.mp3');
-// audio.volume = '0.2';
-
-// document.body.onmousedown = (e) => {
-//   u.src = 'img/usr/8/0.png';
-//   let o = setInterval(() => {
-  
-//     let b = document.createElement('div');
-//     b.style.margin = (x+25)+'px 0 0 '+(y+25)+'px';
-//     b.style.width = '2px';
-//     b.style.height = '2px';
-//     b.style.zIndex = 0;
-//     b.style.position = 'absolute';
-//     b.style.background = 'red';
-//     document.body.append(b);
-
-//     p[0] = (x+25); 
-//     p[1] = (y+25);
-//     p[2] = (e.pageX>(y+50) && e.pageY>(x+50)) ? '1' :
-//            (e.pageX<y && e.pageY>(x+50))      ? '2' :
-//            (e.pageX>(y+50) && e.pageY<x)      ? '3' :
-//            (e.pageX<y && e.pageY<x)           ? '4' :
-//            (e.pageX>(y+50) && e.pageY>x)      ? '5' :
-//            (e.pageX<y && e.pageY>x)           ? '6' :
-//            (e.pageX>y && e.pageY>(x+50))      ? '7' :
-//            (e.pageX>y && e.pageY<(x+50))      ? '8' : '' ;
-
-//     let fire = new Audio('img/fire.mp3');
-//     fire.volume = '0.2';
-//     fire.play();
-    
-//     let z = setInterval(() => { 
-
-//       switch(p[2]){
-//         case '1':  p[0]++;  p[1]++;  break;
-//         case '2':  p[0]++;  p[1]--;  break;
-//         case '3':  p[0]--;  p[1]++;  break;
-//         case '4':  p[0]--;  p[1]--;  break;
-//         case '5': p[0]=p[0]; p[1]++; break;
-//         case '6': p[0]=p[0]; p[1]--; break;
-//         case '7': p[0]++; p[1]=p[1]; break;
-//         case '8': p[0]--; p[1]=p[1]; break;
-//       }
-
-//       b.style.margin = p[0]+'px 0 0 '+p[1]+'px';
-
-//       let w = document.elementFromPoint(b.getBoundingClientRect().x,
-//                                         b.getBoundingClientRect().y);
-
-//       /* [ ... ] */
-//       if(b.getBoundingClientRect().x<50){  b.remove();} 
-//       if(b.getBoundingClientRect().y<50){  b.remove();} 
-//       if(b.getBoundingClientRect().x>1998){b.remove();}
-//       if(b.getBoundingClientRect().y>1998){b.remove();}
-
-//       /* [ VRAG ] */
-//       if(w.classList == 'vrag'){ 
-//         w.style.display = 'none'; 
-//         score[1]++; setMenu('+'+score[1]+' kill','red');
-//         setTimeout(() => { 
-//           w.style.display = 'block'; 
-//         }, 3000); 
-//         b.remove(); 
-//       }
-
-//       /* [ WALL ] */
-//       if(w.classList == 'wall' || w.classList == 'block'){ 
-//         b.remove(); 
-//       }
-
-//       /* [ WALL (WHITE) ] */
-//       let color = ['orange','red','green','blue','pink',
-//       'brown','black','greenyellow','yellow','gray'];
-//       if(w.classList == 'wall' && w.style.background == 'white'){ 
-//         w.style.background = color[random(0,9)];
-//         w.style.transition = '2s ease';
-//         setTimeout(() => { 
-//           w.style.background = color[random(0,9)];
-//           w.style.transition = '3s ease';
-//         }, 3000);
-//         setTimeout(() => { 
-//           w.style.background = 'white';
-//           w.style.transition = '4s ease';
-//         }, 7000);
-//       }
-
-//       /* [ WALL (GREENYELLOW) ] */
-//       if(w.classList == 'wall' && w.style.border == '1px solid orange'){
-//         if(!song){ 
-//           audio.play();
-//           song = 1; 
-//         } else { 
-//           audio.pause(); 
-//           audio = new Audio('music/'+random(0,4)+'.mp3');
-//           audio.volume = '0.2';
-//           song = 0; 
-//         }
-//       }
-
-//     }, 10);
-
-//     setTimeout(() => {
-//       clearInterval(z); b.remove();
-//     }, 5000);
-
-//   }, 100); 
-
-//   document.body.onmouseup = () => { 
-//     clearInterval(o); 
-//   }
-// }
-
-
-
-/* [ ONMOUSEMOVE ] */
-document.onmousemove = (e) => {
-  document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY;
-}
-
-
-
 let p = [0,0];
-
 let song = 0;
 let audio = new Audio('music/'+random(0,2)+'.mp3');
 audio.volume = '0.2';
@@ -367,35 +242,93 @@ document.body.onclick = (e) => {
   p[0] = x+25;
   p[1] = y+25;
 
-  document.getElementById('info').innerHTML = 'p0: '+p[0]+' | p1: '+p[1];
-
   let x1 = 0, y1 = 0, 
   k = (e.pageY-p[1])/(e.pageX-p[0]);
-
-  //marker(p[0],p[1],'red');
-  marker(e.pageX,e.pageY,'green');
 
   let b = document.createElement('div');
   b.style.margin = p[1]+'px 0 0 '+p[0]+'px';
   b.style.width = '2px';
   b.style.height = '2px';
-  b.style.zIndex = 3;
+  b.style.zIndex = 0;
   b.style.position = 'absolute';
   b.style.background = 'red';
   document.body.append(b);
-
 
   let fire = new Audio('img/fire.mp3');
   fire.volume = '0.2';
   fire.play();
 
-  
-  for(let i=0; i<20; i++){
+  /* [ ... ] */
+  // for(let i=0; i<50; i++){
+  //   (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
+  //   if(y1>-500 && y1<500){ 
+  //     marker((x1+p[0]),(y1+p[1]),'black');
+  //     let w = document.elementFromPoint((x1+p[0]),(y1+p[1]));
+  //   }
+  // }
+
+  let z = setInterval(() => {
     (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
-    if(y1>-200 && y1<200){ 
-      marker((x1+p[0]),(y1+p[1]),'black');
+    if(y1>-500 && y1<500){ 
+      
+      b.style.margin = (y1+p[1])+'px 0 0 '+(x1+p[0])+'px';
+      
+      let w = document.elementFromPoint(b.getBoundingClientRect().x,
+                                        b.getBoundingClientRect().y);
+
+      /* [ ... ] */
+      if(b.getBoundingClientRect().x<50){  b.remove();} 
+      if(b.getBoundingClientRect().y<50){  b.remove();} 
+      if(b.getBoundingClientRect().x>1998){b.remove();}
+      if(b.getBoundingClientRect().y>1998){b.remove();}
+
+      /* [ VRAG ] */
+      if(w.classList == 'vrag'){ 
+        w.style.display = 'none'; 
+        score[1]++; setMenu('+'+score[1]+' kill','red');
+        setTimeout(() => { 
+          w.style.display = 'block'; 
+        }, 3000); 
+        b.remove(); 
+      }
+
+      /* [ WALL ] */
+      if(w.classList == 'wall' || w.classList == 'block'){ 
+        b.remove(); 
+      }
+
+      /* [ WALL (WHITE) ] */
+      let color = ['orange','red','green','blue','pink',
+      'brown','black','greenyellow','yellow','gray'];
+      if(w.classList == 'wall' && w.style.background == 'white'){ 
+        w.style.background = color[random(0,9)];
+        w.style.transition = '2s ease';
+        setTimeout(() => { 
+          w.style.background = color[random(0,9)];
+          w.style.transition = '3s ease';
+        }, 3000);
+        setTimeout(() => { 
+          w.style.background = 'white';
+          w.style.transition = '4s ease';
+        }, 7000);
+      }
+
+      /* [ WALL (GREENYELLOW) ] */
+      if(w.classList == 'wall' && w.style.border == '1px solid orange'){
+        if(!song){ 
+          audio.play();
+          song = 1; 
+        } else { 
+          audio.pause(); 
+          audio = new Audio('music/'+random(0,4)+'.mp3');
+          audio.volume = '0.2';
+          song = 0; 
+        }
+      }
+
     }
-  }
+  },10);
+  setTimeout(() => { clearInterval(z); b.remove(); },3000);
 
 }
 
@@ -458,13 +391,13 @@ function createStar(x,y){
     document.body.append(a);
   }, 1000); 
 } 
-//createStar(100,300);
-//createStar(400,600);
-//createStar(800,900);
+createStar(100,300);
+createStar(400,600);
+createStar(800,900);
 
 
 /* [ CREATE BLOCK ] */
-let block = [[260,150,'brown'],
+let block = [[340,200,'brown'],
              [400,200,'black'],
              [900,260,'greenyellow'],
              [1000,260,'yellow']];
@@ -485,18 +418,6 @@ function createBlock(z){
 } createBlock(block);
 
 /* [ MARKER ] */
-// function marker(x,y,z){
-//   let a = document.createElement('div');
-//   a.style.margin = y+'px 0 0 '+x+'px';
-//   a.style.width = '2px';
-//   a.style.height = '2px';
-//   a.style.background = 'red';
-//   if(z){a.style.background = z;}
-//   a.style.position = 'absolute';
-//   a.style.zIndex = 3;
-//   document.body.append(a);
-// } 
-
 function marker(x,y,z){
   let a = document.createElement('div');
   a.style.margin = y+'px 0 0 '+x+'px';
@@ -508,35 +429,6 @@ function marker(x,y,z){
   document.body.append(a);
 } 
 
-/* [ MOUSEMARCER ] */
-// document.body.onclick = (e) => {
-//   let a = document.createElement('div');
-//   a.style.margin = (sy+e.clientY-13)+'px 0 0 '
-//                         +(sx+e.clientX+1)+'px';
-//   a.style.zIndex = 4;
-//   a.style.width = '60px';
-//   a.style.height = '12px';
-//   a.style.fontSize = '10px';
-//   a.style.textAlign = 'center';
-//   a.style.position = 'absolute';
-//   a.style.border = '1px solid black';
-//   a.style.background = 'whitesmoke';
-//   a.innerHTML = 'x: '+e.clientX+' y: '+e.clientY;
-//   document.body.append(a);
-
-//   let b = document.createElement('div');
-//   b.style.margin = sy+e.clientY+'px 0 0 '+sx+e.clientX+'px';
-//   b.style.zIndex = 4;
-//   b.style.width = '2px';
-//   b.style.height = '2px';
-//   b.style.background = 'red';
-//   b.style.position = 'absolute';
-//   document.body.append(b);
-
-//   setTimeout(() => {
-//     a.remove(); b.remove();
-//   }, 3000);
-// }
 
 /* [ ... ] */
 let li = []; let lj = [];
