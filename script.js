@@ -49,7 +49,7 @@ function setMenu(x,z){
   a.innerHTML = (z) ? '<b style="color:'+z+';">'+
   x+'</b>' : '<b style="color:green;">'+x+'</b>';
   document.body.append(a);
-  setTimeout(() => { a.remove(); }, 9000);
+  setTimeout(() => { a.remove(); }, 3000);
 }
 
 /* [ INFO ] */
@@ -70,6 +70,7 @@ let zdor = 50;
 
 let u = document.createElement('div');
 u.style.margin = y+'px 0 0 '+x+'px'; 
+u.style.border = '1px solid red';
 u.style.position = 'absolute';
 u.style.zIndex = 1;
 u.style.width = '50px';
@@ -85,14 +86,14 @@ zdorove.style.border = '1px solid green';
 zdorove.style.position = 'absolute';
 zdorove.style.margin = '-10px 0 0 0';
 zdorove.style.display = 'none';
-zdorove.setAttribute('class','zdorove_user');
+zdorove.setAttribute('id','zdorove');
 u.append(zdorove);
 
 let shkala = document.createElement('div');
 shkala.style.background = 'greenyellow';
 shkala.style.width = zdor+'px';
 shkala.style.height = '5px';
-shkala.setAttribute('class','shkala_user');
+shkala.setAttribute('id','shkala');
 zdorove.append(shkala);
 
 
@@ -207,7 +208,7 @@ document.body.onclick = (e) => {
 
 /* [ CREATE WALL ] */
 function createWall(x,y,z){
-  let a = document.createElement('img');
+  let a = document.createElement('div');
   a.style.margin = y+'px 0 0 '+x+'px';
   a.style.border = '1px solid black';
   a.style.position = 'absolute';
@@ -218,6 +219,7 @@ function createWall(x,y,z){
   a.setAttribute('class', 'wall');
   document.body.append(a);
 } 
+createWall(300,150,'gray');
 createWall(600,200,'gray');
 createWall(800,400,'pink');
 
@@ -262,10 +264,10 @@ function accoutrement(x,y,z){
   }, 1000); 
 } 
 
-accoutrement(200,250,'ammo');
-accoutrement(200,250,'medic');
-accoutrement(1050,150,'medic');
-accoutrement(1050,450,'ammo');
+// accoutrement(200,250,'ammo');
+// accoutrement(200,250,'medic');
+// accoutrement(1050,150,'medic');
+// accoutrement(1050,450,'ammo');
 
 
 /* [ CREATE BLOCK ] */
@@ -283,7 +285,7 @@ function createBlock(z){
     a.style.width = '50px';
     a.style.height = '50px';
     a.style.background = (z[i][2]) ? z[i][2] : 'white';
-    a.setAttribute('class', 'block');
+    a.setAttribute('class', 'none');
     a.setAttribute('index', i);
     document.body.append(a);
   }
@@ -351,6 +353,72 @@ function createVragi(){
     v[5].push(50);
   }
 } createVragi();
+
+/* [ ЕСЛИ ЕСТЬ ПАТРОНЫ ] */
+function bot_fire(){
+   /* [ ... ] */
+  audio('pistol/0');
+
+  for(let i=0;i<v[0].length; i++){
+   
+    let x1 = 0, y1 = 0,
+    k = ((y+25)-(v[0][i][1]+25))/((x+25)-(v[0][i][0]+25));
+
+    let b = document.createElement('div');
+    b.style.margin = (v[0][i][1]+25)+'px 0 0 '+(v[0][i][0]+25)+'px';
+    b.style.width = '2px';
+    b.style.height = '2px';
+    b.style.zIndex = -1;
+    b.style.position = 'absolute';
+    b.style.background = 'red';
+    document.body.append(b);
+
+    let z = setInterval(() => {
+      ((x+25)>(v[0][i][0]+25) ? x1+=10 : x1-=10 ); y1=(k*x1);
+      if(y1>-500 && y1<500){ 
+        
+        b.style.margin = (y1+(v[0][i][1]+25))+'px 0 0 '+(x1+(v[0][i][0]+25))+'px';
+        
+        let w = document.elementFromPoint(b.getBoundingClientRect().x,
+                                          b.getBoundingClientRect().y);
+
+        /* [ ... ] */
+        if(b.getBoundingClientRect().x<50){   b.remove(); } 
+        if(b.getBoundingClientRect().y<50){   b.remove(); } 
+        if(b.getBoundingClientRect().x>1998){ b.remove(); }
+        if(b.getBoundingClientRect().y>1998){ b.remove(); }
+
+        /* [ VRAG ] */
+        if(w.id == 'user'){ 
+          document.getElementById('zdorove').style.display = 'block'; 
+          zdor-=5;
+          document.getElementById('shkala').style.width = zdor+'px';
+
+          if(zdor>37.5){  
+            document.getElementById('shkala').style.background = 'greenyellow';
+          } else if(zdor>25){
+            document.getElementById('shkala').style.background = 'yellow';
+          } else if(zdor>12.5){
+            document.getElementById('shkala').style.background = 'orange';
+          } else if(zdor>0){
+            document.getElementById('shkala').style.background = 'red';
+          } else if(zdor == 0){
+            //w.style.display = 'none';
+          }
+
+          b.remove(); 
+        }
+
+        /* [ WALL ] */
+        if(w.classList == 'wall' || w.classList == 'block'){ 
+          b.remove(); 
+        }
+
+      }
+    },10);
+    setTimeout(() => { clearInterval(z); b.remove(); },3000);
+  }
+} //setInterval(()=>{ bot_fire(); },1000);
 
 function run(){
     let a = setInterval(() => {
@@ -511,13 +579,30 @@ function run(){
 let li = []; let lj = [];
 function contact(){
   li[0] = document.elementFromPoint(u.getBoundingClientRect().x,u.getBoundingClientRect().y-2);
+  //marker(u.getBoundingClientRect().x,u.getBoundingClientRect().y-2);
+
   li[1] = document.elementFromPoint(u.getBoundingClientRect().x-2,u.getBoundingClientRect().y);
+  //marker(u.getBoundingClientRect().x-2,u.getBoundingClientRect().y);
+
   li[2] = document.elementFromPoint(u.getBoundingClientRect().x+50,u.getBoundingClientRect().y-2);
+  //marker(u.getBoundingClientRect().x+50,u.getBoundingClientRect().y-2);
+
   li[3] = document.elementFromPoint(u.getBoundingClientRect().x+52,u.getBoundingClientRect().y);
+  //marker(u.getBoundingClientRect().x+52,u.getBoundingClientRect().y);
+
   li[4] = document.elementFromPoint(u.getBoundingClientRect().x+52,u.getBoundingClientRect().y+50);
+  //marker(u.getBoundingClientRect().x+52,u.getBoundingClientRect().y+50);
+
   li[5] = document.elementFromPoint(u.getBoundingClientRect().x+50,u.getBoundingClientRect().y+52);
+  //marker(u.getBoundingClientRect().x+50,u.getBoundingClientRect().y+52);
+
   li[6] = document.elementFromPoint(u.getBoundingClientRect().x,u.getBoundingClientRect().y+52);
+  //marker(u.getBoundingClientRect().x,u.getBoundingClientRect().y+52);
+
   li[7] = document.elementFromPoint(u.getBoundingClientRect().x-2,u.getBoundingClientRect().y+50);
+  //marker(u.getBoundingClientRect().x-2,u.getBoundingClientRect().y+50);
+
+  //document.getElementById('info').innerHTML = li[2];
 
   /* [ ... ] */
   if(x<50){x+=2;} if(x>1998){x-=2;}
@@ -528,7 +613,7 @@ function contact(){
     /* [ AMMO ] */
     if(li[i].classList == 'ammo'){
       accoutrement(parseInt(li[i].getAttribute('x')),parseInt(li[i].getAttribute('y')),'ammo');
-      li[i].remove(); 
+      li[i].remove();
 
       /* [ ДОБАВИТЬ ПОЛЗОВАТЕЛЮ 10 ПАТРОНОВ ] */
       audio('pistol/2');
@@ -543,90 +628,108 @@ function contact(){
 
       /* [ ... ] */
       zdor = 50;
-      document.getElementsByClassName('shkala_user')[0].style.background = 'greenyellow';
-      document.getElementsByClassName('shkala_user')[0].style.width = zdor+'px';
+      document.getElementById('shkala').style.background = 'greenyellow';
+      document.getElementById('shkala').style.width = zdor+'px';
       audio('star'); break;
     }
 
     /* [ WALL ] */
     if(li[i].classList == 'wall'){
       lj[0] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y-2);
+      //marker(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y-2);
+
       lj[1] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y);
+      //marker(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y);
+
       lj[2] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y-2);
+      //marker(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y-2);
+
       lj[3] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y);
+      //marker(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y);
+
       lj[4] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y+50);
+      //marker(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y+50);
+
       lj[5] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y+52);
+      //marker(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y+52);
+
       lj[6] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y+52);
+      //marker(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y+52);
+
       lj[7] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y+50);
+      //marker(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y+50);
+      //document.getElementById('info').innerHTML = lj[1];
 
       /* [ LEFT ] */
-      if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
-      || (lj[1] == '[object HTMLImageElement]' && lj[7]== '[object HTMLImageElement]' )){
-        y = y;  x-=2; sx-=2;
-      }
+      if(lj[1] == '[object HTMLDivElement]' || lj[7] == '[object HTMLDivElement]' 
+      || (lj[1] == '[object HTMLDivElement]' && lj[7]== '[object HTMLDivElement]')){
+        x-=2; sx-=2;
+        u.style.border = '1px solid greenyellow';
+      } 
 
       /* [ RIGHT ] */
-      if(lj[3] == '[object HTMLImageElement]' || lj[4] == '[object HTMLImageElement]' 
-      || (lj[3] == '[object HTMLImageElement]' && lj[4] == '[object HTMLImageElement]')){
-        y = y;  x+=2; sx+=2;
-      }
+      else if(lj[3] == '[object HTMLDivElement]' || lj[4] == '[object HTMLDivElement]' 
+      || (lj[3] == '[object HTMLDivElement]' && lj[4] == '[object HTMLDivElement]')){
+        x+=2; sx+=2;
+      } 
 
       /* [ TOP ] */
-      if(lj[0] == '[object HTMLImageElement]' || lj[2] == '[object HTMLImageElement]' 
-      || (lj[0] == '[object HTMLImageElement]' && lj[2] == '[object HTMLImageElement]')){
-        y-=2; x = x; sy-=2;
-      }
-
-      /* [ BOTTOM ] */
-      if(lj[6] == '[object HTMLImageElement]' || lj[5] == '[object HTMLImageElement]' 
-      || (lj[6] == '[object HTMLImageElement]' && lj[5] == '[object HTMLImageElement]')){
-        y+=2; x = x; sy+=2;
+      else if(lj[0] == '[object HTMLDivElement]' || lj[2] == '[object HTMLDivElement]' 
+      || (lj[0] == '[object HTMLDivElement]' && lj[2] == '[object HTMLDivElement]')){
+        y-=2; sy-=2;
       } 
+
+      // /* [ BOTTOM ] */
+      else if(lj[6] == '[object HTMLDivElement]' || lj[5] == '[object HTMLDivElement]' 
+      || (lj[6] == '[object HTMLDivElement]' && lj[5] == '[object HTMLDivElement]')){
+        y+=2; sy+=2;
+      }
       break;
     }
 
     /* [ BLOCK ] */
-    if(li[i].classList == 'block'){
-      lj[0] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y-2);
-      lj[1] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y);
-      lj[2] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y-2);
-      lj[3] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y);
-      lj[4] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y+50);
-      lj[5] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y+52);
-      lj[6] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y+52);
-      lj[7] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y+50);
-      let j = li[i].getAttribute('index');
+    // if(li[i].classList == 'block'){
+    //   lj[0] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y-2);
+    //   lj[1] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y);
+    //   lj[2] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y-2);
+    //   lj[3] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y);
+    //   lj[4] = document.elementFromPoint(li[i].getBoundingClientRect().x+52,li[i].getBoundingClientRect().y+50);
+    //   lj[5] = document.elementFromPoint(li[i].getBoundingClientRect().x+50,li[i].getBoundingClientRect().y+52);
+    //   lj[6] = document.elementFromPoint(li[i].getBoundingClientRect().x,li[i].getBoundingClientRect().y+52);
+    //   lj[7] = document.elementFromPoint(li[i].getBoundingClientRect().x-2,li[i].getBoundingClientRect().y+50);
+    //   let j = li[i].getAttribute('index');
 
-      /* [ LEFT ] */
-      if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
-      || (lj[1] == '[object HTMLImageElement]' && lj[7] == '[object HTMLImageElement]')){
-        block[j][1] = block[j][1];  block[j][0] +=2;
-        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
-      }
+    //   /* [ LEFT ] */
+    //   if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
+    //   || (lj[1] == '[object HTMLImageElement]' && lj[7] == '[object HTMLImageElement]')){
+    //     block[j][1] = block[j][1];  block[j][0] +=2;
+    //     li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+    //   }
 
-      /* [ RIGHT ] */
-      if(lj[3] == '[object HTMLImageElement]' || lj[4] == '[object HTMLImageElement]' 
-      || (lj[3] == '[object HTMLImageElement]' && lj[4] == '[object HTMLImageElement]')){
-        block[j][1] = block[j][1];  block[j][0] -=2;
-        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
-      }
+    //   /* [ RIGHT ] */
+    //   if(lj[3] == '[object HTMLImageElement]' || lj[4] == '[object HTMLImageElement]' 
+    //   || (lj[3] == '[object HTMLImageElement]' && lj[4] == '[object HTMLImageElement]')){
+    //     block[j][1] = block[j][1];  block[j][0] -=2;
+    //     li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+    //   }
 
-      /* [ TOP ] */
-      if(lj[0] == '[object HTMLImageElement]' || lj[2] == '[object HTMLImageElement]' 
-      || (lj[0] == '[object HTMLImageElement]' && lj[2] == '[object HTMLImageElement]')){
-        block[j][1] +=2; block[j][0] = block[j][0];
-        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
-      }
+    //   /* [ TOP ] */
+    //   if(lj[0] == '[object HTMLImageElement]' || lj[2] == '[object HTMLImageElement]' 
+    //   || (lj[0] == '[object HTMLImageElement]' && lj[2] == '[object HTMLImageElement]')){
+    //     block[j][1] +=2; block[j][0] = block[j][0];
+    //     li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+    //   }
 
-      /* [ BOTTOM ] */
-      if(lj[6] == '[object HTMLImageElement]' || lj[5] == '[object HTMLImageElement]' 
-      || (lj[6] == '[object HTMLImageElement]' && lj[5] == '[object HTMLImageElement]')){
-        block[j][1] -=2; block[j][0] = block[j][0];
-        li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
-      }
+    //   /* [ BOTTOM ] */
+    //   if(lj[6] == '[object HTMLImageElement]' || lj[5] == '[object HTMLImageElement]' 
+    //   || (lj[6] == '[object HTMLImageElement]' && lj[5] == '[object HTMLImageElement]')){
+    //     block[j][1] -=2; block[j][0] = block[j][0];
+    //     li[i].style.margin = block[j][1]+'px 0 0 '+block[j][0]+'px';
+    //   }
     
-      break;
-    }
+    //   break;
+    // }
+
   }
   window.scroll(sx,sy); u.style.margin = y+'px 0 0 '+x+'px';
 }
@@ -660,8 +763,8 @@ function anim(e){
   } else {
     c = e.code;
   }
-//u.style.background = 'url(img/usr/1/0.png)';
-  document.getElementById('info').innerHTML = ' c: '+c+' d: '+d;
+
+  //document.getElementById('info').innerHTML = ' c: '+c+' d: '+d;
 
   if(c == 'KeyW'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/0/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
   if(c == 'KeyS'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/1/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
@@ -685,3 +788,5 @@ document.onclick = (e) => { u.style.background =
   (e.pageX>y && e.pageY<(x+50))      ? 'url(img/usr/0/'+n+'.png)' :
                                        'url(img/usr/1/'+n+'.png)' ;
 }
+
+
