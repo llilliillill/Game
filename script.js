@@ -24,6 +24,14 @@ function random(min,max){
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+/* [ AUDIO ] */
+function audio(x,y){
+  let a = new Audio('music/'+x+'.mp3');
+  a.volume = '0.2';
+  a.play();
+  return (y) ? a : false;
+} 
+
 /* [ MENU ] */
 function setMenu(x,z){
   if(document.getElementById('menu')){
@@ -58,203 +66,52 @@ function setInfo(){
 } setInfo();
 
 /* [ CREATE USER ] */
-let u = document.createElement('img');
+let zdor = 50;
+
+let u = document.createElement('div');
 u.style.margin = y+'px 0 0 '+x+'px'; 
-u.style.border = '1px solid black';
 u.style.position = 'absolute';
 u.style.zIndex = 1;
 u.style.width = '50px';
 u.style.height = '50px';
-u.src = 'img/usr/1/0.png';
+u.style.background = 'url(img/usr/1/0.png)';
 u.setAttribute('id', 'user');
 document.body.append(u);
 
+let zdorove = document.createElement('div');
+zdorove.style.width = '50px';
+zdorove.style.height = '5px';
+zdorove.style.border = '1px solid green';
+zdorove.style.position = 'absolute';
+zdorove.style.margin = '-10px 0 0 0';
+zdorove.style.display = 'none';
+zdorove.setAttribute('class','zdorove_user');
+u.append(zdorove);
 
-/* [ CREATE VRAG ] */
-let v = {
-  0: [[300,280, 'orange',[],[]],[500,450, 'blue',[],[]],
-      [450,150, 'green', [],[]],[150,500, '',    [],[]]],
-  1:  [0,1],
-  2: document.getElementsByClassName('vrag'),
-}; 
+let shkala = document.createElement('div');
+shkala.style.background = 'greenyellow';
+shkala.style.width = zdor+'px';
+shkala.style.height = '5px';
+shkala.setAttribute('class','shkala_user');
+zdorove.append(shkala);
 
-for(let i=0; i<v[0].length; i++){
-  let vrg = document.createElement('img');
-  vrg.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
-  vrg.style.border = (v[0][i][2] != '') ?   
-  '1px solid '+v[0][i][2] : '1px solid red';
-  vrg.style.position = 'absolute';
-  vrg.style.zIndex = 1;
-  vrg.style.width = '50px';
-  vrg.style.height = '50px';
-  vrg.src = 'img/usr/1/0.png';
-  vrg.setAttribute('class', 'vrag');
-  document.body.append(vrg);
-}
 
-function run(){
-    let a = setInterval(() => {
-      for(let i=0; i<v[0].length; i++){
-        v[0][i][3][0] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y-2);
-        v[0][i][3][1] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y);
-        v[0][i][3][2] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y-2);
-        v[0][i][3][3] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y);
-        v[0][i][3][4] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y+50);
-        v[0][i][3][5] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y+52);
-        v[0][i][3][6] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y+52);
-        v[0][i][3][7] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y+50);
-        
-        /* [ ... ] */
-        if(v[0][i][0]<50){v[0][i][0]+=2;} if(v[0][i][0]>1998){v[0][i][0]-=2;}
-        if(v[0][i][1]<50){v[0][i][1]+=2;} if(v[0][i][1]>1998){v[0][i][1]-=2;}
 
-        for(let j=0; j<v[0][i][3].length; j++){
-
-          /* [ STAR ] */
-          if(v[0][i][3][j].classList == 'star'){
-            createStar(parseInt(v[0][i][3][j].getAttribute('x')),
-                       parseInt(v[0][i][3][j].getAttribute('y')));
-            v[0][i][3][j].remove(); 
-            let str = new Audio('music/star.mp3');
-            str.volume = '0.2';
-            str.play();
-            break;
-          }
-
-          /* [ WALL ] */
-          if(v[0][i][3][j].classList == 'wall'){
-            v[0][i][4][0] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y-2);
-            v[0][i][4][1] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y);
-            v[0][i][4][2] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y-2);
-            v[0][i][4][3] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y);
-            v[0][i][4][4] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y+50);
-            v[0][i][4][5] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y+52);
-            v[0][i][4][6] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y+52);
-            v[0][i][4][7] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y+50);
-
-            /* [ LEFT ] */
-            if(v[0][i][4][1] == '[object HTMLImageElement]' || v[0][i][4][7] == '[object HTMLImageElement]' 
-            || (v[0][i][4][1] == '[object HTMLImageElement]' && v[0][i][4][7] == '[object HTMLImageElement]')){
-              v[0][i][0] = v[0][i][0]; v[0][i][1]-=2; 
-            }
-
-            /* [ RIGHT ] */
-            if(v[0][i][4][3] == '[object HTMLImageElement]' || v[0][i][4][4] == '[object HTMLImageElement]' 
-            || (v[0][i][4][3] == '[object HTMLImageElement]' && v[0][i][4][4] == '[object HTMLImageElement]')){
-              v[0][i][0] = v[0][i][0];  v[0][i][1]+=2; 
-            }
-
-            /* [ TOP ] */
-            if(v[0][i][4][0] == '[object HTMLImageElement]' || v[0][i][4][2] == '[object HTMLImageElement]' 
-            || (v[0][i][4][0] == '[object HTMLImageElement]' && v[0][i][4][2] == '[object HTMLImageElement]')){
-              v[0][i][0]-=2; v[0][i][1] = v[0][i][1]; 
-            }
-
-            /* [ BOTTOM ] */
-            if(v[0][i][4][6] == '[object HTMLImageElement]' || v[0][i][4][5] == '[object HTMLImageElement]' 
-            || (v[0][i][4][6] == '[object HTMLImageElement]' && v[0][i][4][5] == '[object HTMLImageElement]')){
-              v[0][i][0]+=2; v[0][i][1] = v[0][i][1]; 
-            }
-            break;
-          }
-
-          /* [ BLOCK ] */
-          if(v[0][i][3][j].classList == 'block'){
-            v[0][i][4][0] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y-2);
-            v[0][i][4][1] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y);
-            v[0][i][4][2] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y-2);
-            v[0][i][4][3] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y);
-            v[0][i][4][4] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+52,v[0][i][3][j].getBoundingClientRect().y+50);
-            v[0][i][4][5] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x+50,v[0][i][3][j].getBoundingClientRect().y+52);
-            v[0][i][4][6] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x,   v[0][i][3][j].getBoundingClientRect().y+52);
-            v[0][i][4][7] = document.elementFromPoint(v[0][i][3][j].getBoundingClientRect().x-2, v[0][i][3][j].getBoundingClientRect().y+50);
-            let k = v[0][i][3][j].getAttribute('index');
-
-            /* [ LEFT ] */
-            if(v[0][i][4][1] == '[object HTMLImageElement]' || v[0][i][4][7] == '[object HTMLImageElement]' 
-            || (v[0][i][4][1] == '[object HTMLImageElement]' && v[0][i][4][7] == '[object HTMLImageElement]')){
-              block[k][1] = block[k][1];  block[k][0] +=2;
-              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
-            }
-
-            /* [ RIGHT ] */
-            if(v[0][i][4][3] == '[object HTMLImageElement]' || v[0][i][4][4] == '[object HTMLImageElement]' 
-            || (v[0][i][4][3] == '[object HTMLImageElement]' && v[0][i][4][4] == '[object HTMLImageElement]')){
-              block[k][1] = block[k][1];  block[k][0] -=2;
-              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
-            }
-
-            /* [ TOP ] */
-            if(v[0][i][4][0] == '[object HTMLImageElement]' || v[0][i][4][2] == '[object HTMLImageElement]' 
-            || (v[0][i][4][0] == '[object HTMLImageElement]' && v[0][i][4][2] == '[object HTMLImageElement]')){
-              block[k][1] +=2; block[k][0] = block[k][0];
-              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
-            }
-
-            /* [ BOTTOM ] */
-            if(v[0][i][4][6] == '[object HTMLImageElement]' || v[0][i][4][5] == '[object HTMLImageElement]' 
-            || (v[0][i][4][6] == '[object HTMLImageElement]' && v[0][i][4][5] == '[object HTMLImageElement]')){
-              block[k][1] -=2; block[k][0] = block[k][0];
-              v[0][i][3][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
-            }
-            break;
-          }
-        }
-
-        if(v[1][1]){
-          v[0][i][0]+=2; 
-          v[0][i][1]-=2; 
-          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
-                                +v[0][i][0]+'px';
-          v[2][i].src = 'img/usr/5/'+v[1][0]+'.png'; 
-          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0;
-        } else {
-          v[0][i][0]-=2; 
-          v[0][i][1]+=2;  
-          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
-                               + v[0][i][0]+'px';
-          v[2][i].src = 'img/usr/6/'+v[1][0]+'.png'; 
-          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0; 
-        }
-      }
-    }, 80);
-
-    setTimeout(() => {
-      clearInterval(a);
-      for(let i=0; i<v[0].length; i++){
-      v[2][i].src = 'img/usr/1/'+v[1][0]+'.png';}
-      v[1][1] = (v[1][1]) ? v[1][1] = 0 : v[1][1] = 1; run(); 
-    }, 5000);
-
-} run();
 
 
 /* [ FIRE ] */
-//   weapon
-// ['пистолет',
-//   'пистолет пулемет',
-//   'автомат',
-//   'пулемет', 
-//   'снайперская винтовка',
-//   'гранатомет', 
-//   'гранаты'];
+let p = [0,0];
 
 /* [ КОЛ-ВО ПАТРОНОВ В ОРУЖИИ USERA ] */
-let w = [0, 120, 120, 120, 120, 0, 0];
-
-let p = [0,0];
-let song = 0;
-let audio = new Audio('music/'+random(0,2)+'.mp3');
-audio.volume = '0.2';
+let w = [30, 0, 0, 0, 0, 0, 0];
 
 document.body.onclick = (e) => {
   /* [ ЕСЛИ ЕСТЬ ПАТРОНЫ ] */
   if(w[0]>0){
-    let fire = new Audio('music/pistol/0.mp3');
-    fire.volume = '0.2';
-    fire.play();
-    w[0]--;
-    document.getElementById('info').innerHTML = w[0];
+
+    /* [ ... ] */
+    audio('pistol/0'); w[0]--;
+    //document.getElementById('info').innerHTML = w[0];
 
     // Анимация выстрела  
     u.src = 'img/usr/8/0.png';
@@ -262,14 +119,14 @@ document.body.onclick = (e) => {
     p[0] = x+25;
     p[1] = y+25;
 
-    let x1 = 0, y1 = 0, 
+    let x1 = 0, y1 = 0,
     k = (e.pageY-p[1])/(e.pageX-p[0]);
 
     let b = document.createElement('div');
     b.style.margin = p[1]+'px 0 0 '+p[0]+'px';
     b.style.width = '2px';
     b.style.height = '2px';
-    b.style.zIndex = 0;
+    b.style.zIndex = -1;
     b.style.position = 'absolute';
     b.style.background = 'red';
     document.body.append(b);
@@ -284,18 +141,31 @@ document.body.onclick = (e) => {
                                           b.getBoundingClientRect().y);
 
         /* [ ... ] */
-        if(b.getBoundingClientRect().x<50){  b.remove();} 
-        if(b.getBoundingClientRect().y<50){  b.remove();} 
-        if(b.getBoundingClientRect().x>1998){b.remove();}
-        if(b.getBoundingClientRect().y>1998){b.remove();}
+        if(b.getBoundingClientRect().x<50){   b.remove(); } 
+        if(b.getBoundingClientRect().y<50){   b.remove(); } 
+        if(b.getBoundingClientRect().x>1998){ b.remove(); }
+        if(b.getBoundingClientRect().y>1998){ b.remove(); }
 
         /* [ VRAG ] */
         if(w.classList == 'vrag'){ 
-          w.style.display = 'none'; 
-          //score[1]++; setMenu('+'+score[1]+' kill','red');
-          setTimeout(() => { 
-            w.style.display = 'block'; 
-          }, 3000); 
+
+          let index = w.getAttribute('index');
+          document.getElementsByClassName('zdorove')[index].style.display = 'block'; 
+          v[5][index]-=5;
+          document.getElementsByClassName('shkala')[index].style.width = v[5][index]+'px';
+
+          if(v[5][index]>37.5){  
+            document.getElementsByClassName('shkala')[index].style.background = 'greenyellow';
+          } else if(v[5][index]>25){
+            document.getElementsByClassName('shkala')[index].style.background = 'yellow';
+          } else if(v[5][index]>12.5){
+            document.getElementsByClassName('shkala')[index].style.background = 'orange';
+          } else if(v[5][index]>0){
+            document.getElementsByClassName('shkala')[index].style.background = 'red';
+          } else if(v[5][index] == 0){
+            w.style.display = 'none';
+          }
+
           b.remove(); 
         }
 
@@ -322,15 +192,7 @@ document.body.onclick = (e) => {
 
         /* [ WALL (GREENYELLOW) ] */
         if(w.classList == 'wall' && w.style.border == '1px solid orange'){
-          if(!song){ 
-            audio.play();
-            song = 1; 
-          } else { 
-            audio.pause(); 
-            audio = new Audio('music/'+random(0,4)+'.mp3');
-            audio.volume = '0.2';
-            song = 0; 
-          }
+          audio(random(0,4));  
         }
 
       }
@@ -338,11 +200,7 @@ document.body.onclick = (e) => {
     setTimeout(() => { clearInterval(z); b.remove(); },3000);
 
   /* [ ЕСЛИ НЕТ ПАТРОНОВ ] */
-  } else {
-    let fire = new Audio('music/pistol/1.mp3');
-    fire.volume = '0.2';
-    fire.play();
-  }
+  } else { audio('pistol/1'); }
 
 }
 
@@ -356,17 +214,17 @@ function createWall(x,y,z){
   a.style.zIndex = 1;
   a.style.width = '50px';
   a.style.height = '50px';
-  a.style.background = (z) ? z : 'gray';
+  a.style.background = (z) ? z : 'white';
   a.setAttribute('class', 'wall');
   document.body.append(a);
 } 
-createWall(600,200);
+createWall(600,200,'gray');
 createWall(800,400,'pink');
 
 /* [ WHITE ] */
-createWall(595,350,'white');
-createWall(650,550,'white');
-createWall(705,255,'white');
+createWall(595,350);
+createWall(650,550);
+createWall(705,255);
 
 
 
@@ -382,32 +240,32 @@ function createSong(x,y){
   a.src = 'music/music.png';
   a.setAttribute('class', 'wall');
   document.body.append(a);
-} createSong(800,310);
+} createSong(50,50);
 
 
 
-/* [ CREATE STAR ] */
-function createStar(x,y){ 
+/* [ ACCOUTREMENT ] */
+function accoutrement(x,y,z){ 
   setTimeout(() => {
-    let a = document.createElement('img');
-    a.style.border = '2px solid orange';
-    a.style.borderRadius = '50%';
+    let a = document.createElement('div');
     a.style.margin = random(y,(y+200))+'px 0 0 '
                     +random(x,(x+200))+'px';
     a.style.zIndex = 1;
     a.style.position = 'absolute';
     a.style.width = '50px';
     a.style.height = '50px';
-    a.src = 'img/star.png';
+    a.style.background = 'url(img/'+z+'.png)';
     a.setAttribute('x', x);
     a.setAttribute('y', y);
-    a.setAttribute('class', 'star');
+    a.setAttribute('class', z);
     document.body.append(a);
   }, 1000); 
 } 
-createStar(150,150);
-createStar(1050,150);
-createStar(1050,450);
+
+accoutrement(200,250,'ammo');
+accoutrement(200,250,'medic');
+accoutrement(1050,150,'medic');
+accoutrement(1050,450,'ammo');
 
 
 /* [ CREATE BLOCK ] */
@@ -429,7 +287,7 @@ function createBlock(z){
     a.setAttribute('index', i);
     document.body.append(a);
   }
-} createBlock(block);
+}// createBlock(block);
 
 /* [ MARKER ] */
 function marker(x,y,z){
@@ -444,7 +302,212 @@ function marker(x,y,z){
 } 
 
 
-/* [ ... ] */
+
+
+
+/* [ CREATE VRAG ] */
+let v = {
+  0: [[300,280, 'orange'],[500,450, 'blue'],
+      [450,150, 'green' ],[150,500, '',   ]],
+  1:  [0,1],
+  2: document.getElementsByClassName('vrag'),
+  3: [], 4: [], 5: []
+}; 
+
+function createVragi(){
+  for(let i=0; i<v[0].length; i++){
+    let vrg = document.createElement('div');
+    vrg.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
+    //vrg.style.border = (v[0][i][2] != '') ? '1px solid '
+    //+v[0][i][2] : '1px solid red';
+    vrg.style.position = 'absolute';
+    vrg.style.zIndex = 0;
+    vrg.style.width = '50px';
+    vrg.style.height = '50px';
+    vrg.style.background = 'url(img/usr/1/0.png)';
+    vrg.setAttribute('index', i);
+    vrg.setAttribute('class', 'vrag');
+    document.body.append(vrg);
+
+    let zdorove = document.createElement('div');
+    zdorove.style.width = '50px';
+    zdorove.style.height = '5px';
+    zdorove.style.border = '1px solid green';
+    zdorove.style.position = 'absolute';
+    zdorove.style.margin = '-10px 0 0 0';
+    zdorove.style.display = 'none';
+    zdorove.setAttribute('class','zdorove');
+    vrg.append(zdorove);
+
+    let shkala = document.createElement('div');
+    shkala.style.background = 'greenyellow';
+    shkala.style.width = '50px';
+    shkala.style.height = '5px';
+    shkala.setAttribute('class','shkala');
+    zdorove.append(shkala);
+
+    v[3].push([0,0,0,0,0,0,0]); 
+    v[4].push([0,0,0,0,0,0,0]);
+    v[5].push(50);
+  }
+} createVragi();
+
+function run(){
+    let a = setInterval(() => {
+      for(let i=0; i<v[0].length; i++){
+        v[3][i][0] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y-2);
+        v[3][i][1] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y);
+        v[3][i][2] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y-2);
+        v[3][i][3] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y);
+        v[3][i][4] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y+50);
+        v[3][i][5] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y+52);
+        v[3][i][6] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y+52);
+        v[3][i][7] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y+50);
+        
+        /* [ ... ] */
+        if(v[0][i][0]<50){v[0][i][0]+=2;} if(v[0][i][0]>1998){v[0][i][0]-=2;}
+        if(v[0][i][1]<50){v[0][i][1]+=2;} if(v[0][i][1]>1998){v[0][i][1]-=2;}
+
+        for(let j=0; j<v[3][i].length; j++){
+
+          /* [ AMMO ] */
+          if(v[3][i][j].classList == 'ammo'){
+            accoutrement(parseInt(v[3][i][j].getAttribute('x')),parseInt(v[3][i][j].getAttribute('y')),'ammo');
+            v[3][i][j].remove(); 
+
+            /* [ ... ] */
+            audio('pistol/2'); break;
+          }
+
+          /* [ MEDIC ] */
+          if(v[3][i][j].classList == 'medic'){
+            accoutrement(parseInt(v[3][i][j].getAttribute('x')),parseInt(v[3][i][j].getAttribute('y')),'medic');
+            v[3][i][j].remove(); 
+
+            /* [ ... ] */
+            v[5][i] = 50;
+            document.getElementsByClassName('shkala')[i].style.background = 'greenyellow';
+            document.getElementsByClassName('shkala')[i].style.width = v[5][i]+'px';
+            audio('star'); break;
+          }
+
+          /* [ WALL ] */
+          if(v[3][i][j].classList == 'wall'){
+            v[4][i][0] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x,   v[3][i][j].getBoundingClientRect().y-2);
+            v[4][i][1] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x-2, v[3][i][j].getBoundingClientRect().y);
+            v[4][i][2] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+50,v[3][i][j].getBoundingClientRect().y-2);
+            v[4][i][3] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+52,v[3][i][j].getBoundingClientRect().y);
+            v[4][i][4] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+52,v[3][i][j].getBoundingClientRect().y+50);
+            v[4][i][5] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+50,v[3][i][j].getBoundingClientRect().y+52);
+            v[4][i][6] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x,   v[3][i][j].getBoundingClientRect().y+52);
+            v[4][i][7] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x-2, v[3][i][j].getBoundingClientRect().y+50);
+
+            /* [ LEFT ] */
+            if(v[4][i][1] == '[object HTMLDivElement]' || v[4][i][7] == '[object HTMLDivElement]' 
+            || (v[4][i][1] == '[object HTMLDivElement]' && v[4][i][7] == '[object HTMLDivElement]')){
+              v[0][i][0] = v[0][i][0]; v[0][i][1]-=2; 
+              //v[0][i][1] = v[0][i][1];  v[0][i][0]-=2;
+            }
+
+            /* [ RIGHT ] */
+            if(v[4][i][3] == '[object HTMLDivElement]' || v[4][i][4] == '[object HTMLDivElement]' 
+            || (v[4][i][3] == '[object HTMLDivElement]' && v[4][i][4] == '[object HTMLDivElement]')){
+              v[0][i][0] = v[0][i][0];  v[0][i][1]+=2; 
+              //v[0][i][1] = v[0][i][1];  v[0][i][0]+=2;
+            }
+
+            /* [ TOP ] */
+            if(v[4][i][0] == '[object HTMLDivElement]' || v[4][i][2] == '[object HTMLDivElement]' 
+            || (v[4][i][0] == '[object HTMLDivElement]' && v[4][i][2] == '[object HTMLDivElement]')){
+              v[0][i][0]-=2; v[0][i][1] = v[0][i][1]; 
+              //v[0][i][1]-=2; v[0][i][0] = v[0][i][0];
+            }
+
+            /* [ BOTTOM ] */
+            if(v[4][i][6] == '[object HTMLDivElement]' || v[4][i][5] == '[object HTMLDivElement]' 
+            || (v[4][i][6] == '[object HTMLDivElement]' && v[4][i][5] == '[object HTMLDivElement]')){
+              v[0][i][0]+=2; v[0][i][1] = v[0][i][1]; 
+              //v[0][i][1]+=2; v[0][i][0] = v[0][i][0];
+            }
+            break;
+          }
+
+          /* [ BLOCK ] */
+          if(v[3][i][j].classList == 'block'){
+            v[4][i][0] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x,   v[3][i][j].getBoundingClientRect().y-2);
+            v[4][i][1] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x-2, v[3][i][j].getBoundingClientRect().y);
+            v[4][i][2] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+50,v[3][i][j].getBoundingClientRect().y-2);
+            v[4][i][3] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+52,v[3][i][j].getBoundingClientRect().y);
+            v[4][i][4] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+52,v[3][i][j].getBoundingClientRect().y+50);
+            v[4][i][5] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x+50,v[3][i][j].getBoundingClientRect().y+52);
+            v[4][i][6] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x,   v[3][i][j].getBoundingClientRect().y+52);
+            v[4][i][7] = document.elementFromPoint(v[3][i][j].getBoundingClientRect().x-2, v[3][i][j].getBoundingClientRect().y+50);
+            let k = v[3][i][j].getAttribute('index');
+
+            /* [ LEFT ] */
+            if(v[4][i][1] == '[object HTMLImageElement]' || v[4][i][7] == '[object HTMLImageElement]' 
+            || (v[4][i][1] == '[object HTMLImageElement]' && v[4][i][7] == '[object HTMLImageElement]')){
+              block[k][1] = block[k][1];  block[k][0]+=2;
+              v[3][i][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+
+            /* [ RIGHT ] */
+            if(v[4][i][3] == '[object HTMLImageElement]' || v[4][i][4] == '[object HTMLImageElement]' 
+            || (v[4][i][3] == '[object HTMLImageElement]' && v[4][i][4] == '[object HTMLImageElement]')){
+              block[k][1] = block[k][1];  block[k][0]-=2;
+              v[3][i][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+
+            /* [ TOP ] */
+            if(v[4][i][0] == '[object HTMLImageElement]' || v[4][i][2] == '[object HTMLImageElement]' 
+            || (v[4][i][0] == '[object HTMLImageElement]' && v[4][i][2] == '[object HTMLImageElement]')){
+              block[k][1]+=2; block[k][0] = block[k][0];
+              v[3][i][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+
+            /* [ BOTTOM ] */
+            if(v[4][i][6] == '[object HTMLImageElement]' || v[4][i][5] == '[object HTMLImageElement]' 
+            || (v[4][i][6] == '[object HTMLImageElement]' && v[4][i][5] == '[object HTMLImageElement]')){
+              block[k][1]-=2; block[k][0] = block[k][0];
+              v[3][i][j].style.margin = block[k][1]+'px 0 0 '+block[k][0]+'px';
+            }
+            break;
+          }
+        }
+
+        if(v[1][1]){
+          v[0][i][0]+=2; 
+          v[0][i][1]-=2; 
+          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
+                                +v[0][i][0]+'px';
+          v[2][i].style.background = 'url(img/usr/5/'+v[1][0]+'.png)';
+          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0;
+        } else {
+          v[0][i][0]-=2; 
+          v[0][i][1]+=2;  
+          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
+                              + v[0][i][0]+'px';
+          v[2][i].style.background = 'url(img/usr/6/'+v[1][0]+'.png)';
+          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0;
+        }
+
+      }
+    }, 80);
+
+    setTimeout(() => {
+      clearInterval(a);
+      for(let i=0; i<v[0].length; i++){
+        v[2][i].style.background = 'url(img/usr/1/'+v[1][0]+'.png)';
+      }
+      v[1][1] = (v[1][1]) ? v[1][1] = 0 : v[1][1] = 1; run(); 
+    }, 5000);
+
+} run();
+
+
+
+
+/* [ CONTACT ] */
 let li = []; let lj = [];
 function contact(){
   li[0] = document.elementFromPoint(u.getBoundingClientRect().x,u.getBoundingClientRect().y-2);
@@ -462,26 +525,27 @@ function contact(){
 
   for(let i=0; i<li.length; i++){
 
-    /* [ STAR ] */
-    if(li[i].classList == 'star'){
-      createStar(parseInt(li[i].getAttribute('x')),
-                 parseInt(li[i].getAttribute('y')));
+    /* [ AMMO ] */
+    if(li[i].classList == 'ammo'){
+      accoutrement(parseInt(li[i].getAttribute('x')),parseInt(li[i].getAttribute('y')),'ammo');
       li[i].remove(); 
 
-      /* [ ПОЙМАНА ЗВЕЗДА ] */
-      // let str = new Audio('music/star.mp3');
-      // str.volume = '0.2';
-      // str.play();
-      //score[0]++; 
-      //setMenu('+'+score[0]+' star'); 
-
       /* [ ДОБАВИТЬ ПОЛЗОВАТЕЛЮ 10 ПАТРОНОВ ] */
-      let fire = new Audio('music/pistol/2.mp3');
-      fire.volume = '0.2';
-      fire.play();
+      audio('pistol/2');
       if(w[0]<120){ w[0] += 10; }
-      document.getElementById('info').innerHTML = w[0]+' патронов';
       break;
+    }
+
+    /* [ MEDIC ] */
+    if(li[i].classList == 'medic'){
+      accoutrement(parseInt(li[i].getAttribute('x')),parseInt(li[i].getAttribute('y')),'medic');
+      li[i].remove(); 
+
+      /* [ ... ] */
+      zdor = 50;
+      document.getElementsByClassName('shkala_user')[0].style.background = 'greenyellow';
+      document.getElementsByClassName('shkala_user')[0].style.width = zdor+'px';
+      audio('star'); break;
     }
 
     /* [ WALL ] */
@@ -497,28 +561,27 @@ function contact(){
 
       /* [ LEFT ] */
       if(lj[1] == '[object HTMLImageElement]' || lj[7] == '[object HTMLImageElement]' 
-      || (lj[1] == '[object HTMLImageElement]' && lj[7] == '[object HTMLImageElement]')){
-        x = x;  y-=2; sx-=2;
+      || (lj[1] == '[object HTMLImageElement]' && lj[7]== '[object HTMLImageElement]' )){
+        y = y;  x-=2; sx-=2;
       }
 
       /* [ RIGHT ] */
       if(lj[3] == '[object HTMLImageElement]' || lj[4] == '[object HTMLImageElement]' 
       || (lj[3] == '[object HTMLImageElement]' && lj[4] == '[object HTMLImageElement]')){
-        x = x;  y+=2; sx+=2;
+        y = y;  x+=2; sx+=2;
       }
 
       /* [ TOP ] */
       if(lj[0] == '[object HTMLImageElement]' || lj[2] == '[object HTMLImageElement]' 
       || (lj[0] == '[object HTMLImageElement]' && lj[2] == '[object HTMLImageElement]')){
-        x-=2; y = y; sy-=2;
+        y-=2; x = x; sy-=2;
       }
 
       /* [ BOTTOM ] */
       if(lj[6] == '[object HTMLImageElement]' || lj[5] == '[object HTMLImageElement]' 
       || (lj[6] == '[object HTMLImageElement]' && lj[5] == '[object HTMLImageElement]')){
-        x+=2; y = y; sy+=2;
-      }
-
+        y+=2; x = x; sy+=2;
+      } 
       break;
     }
 
@@ -566,9 +629,7 @@ function contact(){
     }
   }
   window.scroll(sx,sy); u.style.margin = y+'px 0 0 '+x+'px';
-  //document.getElementById('info').innerHTML = ' x: '+x+' y: '+y;
 }
-//document.getElementById('info').innerHTML = ' x: '+x+' y: '+y;
 
 /* [ MOVE ] */
 let a = 0; let b = 0;
@@ -582,7 +643,7 @@ document.onkeydown = function(e){
   }
 }
 document.onkeyup = function(e){
-  c = 0; d = 0; clearInterval(r);
+  clearInterval(r); c = 0; d = 0; 
   switch(e.code){
     case 'KeyW': clearInterval(a); a = 0; break;
     case 'KeyS': clearInterval(a); a = 0; break;
@@ -594,31 +655,33 @@ document.onkeyup = function(e){
 /* [ ANIMATION ] */
 let n = 0; let r = 0;
 function anim(e){
-  if((c == '' || d == '') && (c != '' && e.code != c)){
-    if(c != d && e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ d = e.code; }
+  if((e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD') && (c != '')){
+    if(c != d){ d = e.code; }
   } else {
-    if(e.code == 'KeyW' || 'KeyS' || 'KeyA' || 'KeyD'){ c = e.code; }
+    c = e.code;
   }
+//u.style.background = 'url(img/usr/1/0.png)';
+  document.getElementById('info').innerHTML = ' c: '+c+' d: '+d;
 
-  if(c == 'KeyW'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/0/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
-  if(c == 'KeyS'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/1/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
-  if(c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/2/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
-  if(c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/3/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyW'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/0/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyS'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/1/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/2/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/3/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
 
-  if(c == 'KeyW' && d == 'KeyD' || d == 'KeyW' && c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/5/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
-  if(c == 'KeyW' && d == 'KeyA' || d == 'KeyW' && c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/4/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
-  if(c == 'KeyS' && d == 'KeyD' || d == 'KeyS' && c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/7/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
-  if(c == 'KeyS' && d == 'KeyA' || d == 'KeyS' && c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.src = 'img/usr/6/'+n+'.png'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyW' && d == 'KeyD' || d == 'KeyW' && c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/5/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyW' && d == 'KeyA' || d == 'KeyW' && c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/4/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyS' && d == 'KeyD' || d == 'KeyS' && c == 'KeyD'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/7/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
+  if(c == 'KeyS' && d == 'KeyA' || d == 'KeyS' && c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u.style.background = 'url(img/usr/6/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
 }
-document.onclick = (e) => { u.src =
-  (e.pageX>(y+50) && e.pageY>(x+50)) ? 'img/usr/7/'+n+'.png' :
-  (e.pageX<y && e.pageY>(x+50))      ? 'img/usr/6/'+n+'.png' :
-  (e.pageX>(y+50) && e.pageY<x)      ? 'img/usr/5/'+n+'.png' :
-  (e.pageX<y && e.pageY<x)           ? 'img/usr/4/'+n+'.png' :
-  (e.pageX>(y+50) && e.pageY>x)      ? 'img/usr/3/'+n+'.png' :
-  (e.pageX<y && e.pageY>x)           ? 'img/usr/2/'+n+'.png' :
-  (e.pageX>y && e.pageY>(x+50))      ? 'img/usr/1/'+n+'.png' :
-  (e.pageX>y && e.pageY<(x+50))      ? 'img/usr/0/'+n+'.png' :
-                                       'img/usr/1/'+n+'.png' ;
-  //document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY;
+
+document.onclick = (e) => { u.style.background =
+  (e.pageX>(y+50) && e.pageY>(x+50)) ? 'url(img/usr/7/'+n+'.png)' :
+  (e.pageX<y && e.pageY>(x+50))      ? 'url(img/usr/6/'+n+'.png)' :
+  (e.pageX>(y+50) && e.pageY<x)      ? 'url(img/usr/5/'+n+'.png)' :
+  (e.pageX<y && e.pageY<x)           ? 'url(img/usr/4/'+n+'.png)' :
+  (e.pageX>(y+50) && e.pageY>x)      ? 'url(img/usr/3/'+n+'.png)' :
+  (e.pageX<y && e.pageY>x)           ? 'url(img/usr/2/'+n+'.png)' :
+  (e.pageX>y && e.pageY>(x+50))      ? 'url(img/usr/1/'+n+'.png)' :
+  (e.pageX>y && e.pageY<(x+50))      ? 'url(img/usr/0/'+n+'.png)' :
+                                       'url(img/usr/1/'+n+'.png)' ;
 }
