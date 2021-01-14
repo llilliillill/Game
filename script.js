@@ -70,13 +70,352 @@ let sx = 0, sy = 0;
 
 
 
+/* [ CREATE WALL ] */
+function createWall(x,y,z){
+  let a = document.createElement('div');
+  a.style.margin = y+'px 0 0 '+x+'px';
+  a.style.border = '1px solid black';
+  a.style.position = 'absolute';
+  a.style.zIndex = 2;
+  a.style.width = '50px';
+  a.style.height = '50px';
+  a.style.background = (z) ? z : 'white';
+  a.setAttribute('class', 'wall');
+  document.body.append(a);
+} 
+//createWall(300,150,'gray');
+createWall(260,150,'gray');
+createWall(600,200,'gray');
+createWall(800,400,'pink');
+
+/* [ WHITE ] */
+createWall(500,422,'brown');
+createWall(650,550);
+createWall(705,255);
+
+
+
+/* [ CREATE SONG ] */
+function createSong(x,y){
+  let a = document.createElement('img');
+  a.style.margin = y+'px 0 0 '+x+'px';
+  a.style.border = '1px solid orange';
+  a.style.position = 'absolute';
+  a.style.zIndex = 1;
+  a.style.width = '50px';
+  a.style.height = '50px';
+  a.src = 'music/music.png';
+  a.setAttribute('class', 'wall');
+  document.body.append(a);
+} createSong(50,50);
+
+
+
+/* [ ACCOUTREMENT ] */
+function accoutrement(x,y,z){ 
+  setTimeout(() => {
+    let a = document.createElement('div');
+    a.style.margin = random(y,(y+200))+'px 0 0 '
+                    +random(x,(x+200))+'px';
+    a.style.zIndex = 1;
+    a.style.position = 'absolute';
+    a.style.width = '50px';
+    a.style.height = '50px';
+    a.style.background = 'url(img/'+z+'.png)';
+    a.setAttribute('x', x);
+    a.setAttribute('y', y);
+    a.setAttribute('class', z);
+    document.body.append(a);
+  }, 1000); 
+} 
+accoutrement(200,250,'ammo');
+accoutrement(200,250,'medic');
+// accoutrement(1050,150,'medic');
+// accoutrement(1050,450,'ammo');
+
+
+/* [ CREATE BLOCK ] */
+let block = [[280,300,'brown'],
+             [400,270,'black'],
+             [900,260,'greenyellow'],
+             [1000,260,'yellow']];
+function createBlock(z){
+  for(let i=0; i<z.length; i++){
+    let a = document.createElement('div');
+    a.style.margin = z[i][1]+'px 0 0 '+z[i][0]+'px';
+    a.style.border = '1px solid black';
+    a.style.position = 'absolute';
+    a.style.zIndex = 2;
+    a.style.width = '50px';
+    a.style.height = '50px';
+    a.style.background = (z[i][2]) ? z[i][2] : 'white';
+    a.setAttribute('class', 'block');
+    a.setAttribute('index', i);
+    document.body.append(a);
+  }
+} //createBlock(block);
+
+
+
+
+
+/* [ CREATE VRAG ] */
+let v = {
+  0: [[1050,150, 'orange'],[1050,250, 'blue'],
+      [1050,350, 'green' ],[1050,450, 'red',]],
+  1:  [0,1],
+  2: document.getElementsByClassName('vrag'),
+  3: [], 
+  4: [], // delete
+  5: []
+}; 
+
+function createVragi(){
+  for(let i=0; i<v[0].length; i++){
+    let a = document.createElement('div');
+    a.style.margin = v[0][i][1]+'px 0 0 '+v[0][i][0]+'px';
+    a.style.border = (v[0][i][2]) ? '1px solid '+v[0][i][2] : '1px solid white';
+    a.style.position = 'absolute';
+    a.style.zIndex = 0;
+    a.style.width = '50px';
+    a.style.height = '50px';
+    a.style.background = 'url(img/usr/1/0.png)';
+    a.style.display = 'block';
+    a.setAttribute('index', i);
+    a.setAttribute('class', 'vrag');
+    document.body.append(a);
+
+    let b = document.createElement('div');
+    b.style.width = '50px';
+    b.style.height = '5px';
+    b.style.border = '1px solid green';
+    b.style.position = 'absolute';
+    b.style.margin = '-10px 0 0 0';
+    b.style.display = 'none';
+    b.setAttribute('class','zdorove');
+    a.append(b);
+
+    let c = document.createElement('div');
+    c.style.background = 'greenyellow';
+    c.style.width = '50px';
+    c.style.height = '5px';
+    c.setAttribute('class','shkala');
+    b.append(c);
+
+    v[3].push([0,0,0,0,0,0,0]); 
+    v[4].push([0,0,0,0,0,0,0]);
+    v[5].push(50);
+  }
+} createVragi();
+
+
+
+/* [ СМЕЩЕНИЕ К ТОЧКЕ ] */
+function run(i,x,y){
+  let x1 = 0, y1 = 0;
+  let k = (y-v[0][i][1])/(x-v[0][i][0]);
+
+  let z = setInterval(() => {
+    if(v[5][i] == 0){ clearInterval(z); }
+
+    if(x>v[0][i][0]){
+      x1+=2; y1=(k*x1);
+      if((x1+v[0][i][0]) < x){
+        v[2][i].style.margin = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
+        
+      } else {
+     
+        clearInterval(z);
+        v[0][i][0] = (x1+v[0][i][0]);
+        v[0][i][1] = (y1+v[0][i][1]);
+        document.getElementById('info').innerHTML = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
+      }
+    } else {
+      x1-=2; y1=(k*x1);
+      if((x1+v[0][i][0]) > x){
+        v[2][i].style.margin = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
+        
+      } else {
+        
+        clearInterval(z);
+        v[0][i][0] = (x1+v[0][i][0]);
+        v[0][i][1] = (y1+v[0][i][1]);
+        document.getElementById('info').innerHTML = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
+      }
+    }
+  }, 24);
+} 
+
+
+
+/* [ СМЕЩЕНИЕ К УКРЫТИЮ ] */
+run(0,700,200); //orange
+run(1,600,422); //blue
+run(2,807,255); //green
+run(3,900,400); //red
+
+/* [ ПОЗИЦИЯ ДЛЯ СТРЕЛЬБЫ ] */
+setTimeout(() => {
+  run(0,650,150); //orange
+  run(1,550,372); //blue
+  run(2,757,205); //green
+  run(3,850,350); //red
+},8500);
+
+/* [ ОТКРЫТЬ ОГОНЬ ПО USER ] */
+setTimeout(() => { 
+  fireBot(0);
+  fireBot(1);
+  fireBot(2);
+  fireBot(3);
+},8600);
+
+
+
+function fireBot(i){
+ setInterval(() => { 
+  if(u[2]>0){
+
+    audio('pistol/0');
+
+    let x1 = 0, y1 = 0,
+    k = ((y+25)-(v[0][i][1]+25))/((x+25)-(v[0][i][0]+25));
+
+    let b = document.createElement('div');
+    b.style.margin = (v[0][i][1]+25)+'px 0 0 '+(v[0][i][0]+25)+'px';
+    b.style.width = '2px';
+    b.style.height = '2px';
+    b.style.zIndex = -1;
+    b.style.position = 'absolute';
+    b.style.background = 'red';
+    document.body.append(b);
+    
+    let z = setInterval(() => {
+      ((x+25)>(v[0][i][0]+25) ? x1+=10 : x1-=10 ); y1=(k*x1);
+      if(y1>-500 && y1<500){ 
+        
+        b.style.margin = (y1+(v[0][i][1]+25))+'px 0 0 '+(x1+(v[0][i][0]+25))+'px';
+        
+        let w = document.elementFromPoint(b.getBoundingClientRect().x, b.getBoundingClientRect().y);
+
+        /* [ ... ] */
+        if(b.getBoundingClientRect().x<50){   b.remove(); } 
+        if(b.getBoundingClientRect().y<50){   b.remove(); } 
+        if(b.getBoundingClientRect().x>1998){ b.remove(); } 
+        if(b.getBoundingClientRect().y>1998){ b.remove(); } 
+
+        /* [ VRAG ] */
+        if(w.classList == 'user'){ 
+          document.getElementById('zdorove').style.display = 'block'; 
+          u[2]-=5;
+          document.getElementById('shkala').style.width = u[2]+'px';
+
+          if(u[2]>37.5){  
+            document.getElementById('shkala').style.background = 'greenyellow';
+          } else if(u[2]>25){
+            document.getElementById('shkala').style.background = 'yellow';
+          } else if(u[2]>12.5){
+            document.getElementById('shkala').style.background = 'orange';
+          } else if(u[2]>0){
+            document.getElementById('shkala').style.background = 'red';
+          } else if(u[2]==0){
+            w.style.display = 'none';
+            x = 200; sx = 0;
+            y = 150; sy = 0;
+
+            /* [ ВОЗРОЖДЕНИЕ ] */
+            setTimeout(() => {
+
+              /* [ ПОПОЛНИТЬ ЗДОРОВЬЕ ] */
+              document.getElementById('zdorove').style.display = 'none';
+              u[2] = 50;
+              document.getElementById('shkala').style.background = 'greenyellow';
+              document.getElementById('shkala').style.width = u[2]+'px';
+
+              /* [ ВЫДВИНУТЬСЯ НА ПОЗИЦИЮ ] */
+              w.style.display = 'block';
+              window.scroll(sx,sy); 
+              w.style.margin = y+'px 0 0 '+x+'px';
+            },3000);
+          }
+
+          b.remove(); 
+        }
+
+        /* [ WALL ] */
+        if(w.classList == 'wall' || w.classList == 'block'){ 
+          b.remove(); 
+        }
+      }
+    },10);
+    setTimeout(() => { clearInterval(z); b.remove(); },3000);
+  } 
+ },1000+(i*100));
+} 
+
+
+/* [ ONMOUSEMOVE ] */
+document.onmousemove = (e) => {
+  document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY;
+}
+
+
+
+
+
+
+
+
+/* [ OBJECT USER ] */
+let u = {
+  0: [200,150],
+  1: document.getElementsByClassName('user'),
+  2: 50,
+};
+// Position
+let x = 200; let  y = 150; 
+
+/* [ CREATE USER ] */
+function createUser(){
+  let a = document.createElement('div');
+  a.style.margin = y+'px 0 0 '+x+'px';
+  a.style.border = '1px solid red';
+  a.style.position = 'absolute';
+  a.style.zIndex = 1;
+  a.style.width = '50px';
+  a.style.height = '50px';
+  a.style.background = 'url(img/usr/1/0.png)';
+  a.style.display = 'block';
+  a.setAttribute('id', 'user');
+  a.setAttribute('class', 'user');
+  document.body.append(a);
+
+  let b = document.createElement('div');
+  b.style.width = '50px';
+  b.style.height = '5px';
+  b.style.border = '1px solid green';
+  b.style.position = 'absolute';
+  b.style.margin = '-10px 0 0 0';
+  b.style.display = 'none';
+  b.setAttribute('id','zdorove');
+  a.append(b);
+
+  let c = document.createElement('div');
+  c.style.background = 'greenyellow';
+  c.style.width = u[2]+'px';
+  c.style.height = '5px';
+  c.setAttribute('id','shkala');
+  b.append(c);
+} createUser();
+
+
 
 /* [ FIRE ] */
 
 // Точка начала огня
 let p = [0,0];
 //Количкство патронов
-let w = [30, 0, 0, 0, 0, 0, 0];
+let w = [120, 0, 0, 0, 0, 0, 0];
 
 document.body.onclick = (e) => {
   //Если есть патроны
@@ -84,7 +423,6 @@ document.body.onclick = (e) => {
 
     /* [ ... ] */
     audio('pistol/0'); w[0]--;
-    //document.getElementById('info').innerHTML = w[0];
 
     // Анимация выстрела  
     u[1].src = 'img/usr/8/0.png';
@@ -106,7 +444,7 @@ document.body.onclick = (e) => {
 
     let z = setInterval(() => {
       (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
-      if(y1>-500 && y1<500){ 
+      if(y1>-500 && y1<500){
         
         b.style.margin = (y1+p[1])+'px 0 0 '+(x1+p[0])+'px';
         
@@ -119,13 +457,13 @@ document.body.onclick = (e) => {
         if(b.getBoundingClientRect().y>1998){ b.remove(); }
 
         /* [ VRAG ] */
-        if(w.classList == 'vrag'){ 
+        if(w.classList == 'vrag'){
           let index = w.getAttribute('index');
-          document.getElementsByClassName('zdorove')[index].style.display = 'block'; 
+          document.getElementsByClassName('zdorove')[index].style.display = 'block';
           v[5][index]-=5;
           document.getElementsByClassName('shkala')[index].style.width = v[5][index]+'px';
 
-          if(v[5][index]>37.5){  
+          if(v[5][index]>37.5){
             document.getElementsByClassName('shkala')[index].style.background = 'greenyellow';
           } else if(v[5][index]>25){
             document.getElementsByClassName('shkala')[index].style.background = 'yellow';
@@ -134,7 +472,27 @@ document.body.onclick = (e) => {
           } else if(v[5][index]>0){
             document.getElementsByClassName('shkala')[index].style.background = 'red';
           } else if(v[5][index] == 0){
+
+            let start = [[1050,150],[1050,250],[1050,350],[1050,450]];
+            let fire  = [[650,150],[550,372],[757,205],[850,350]];
+
             w.style.display = 'none';
+            v[0][index][0] = start[index][0];
+            v[0][index][1] = start[index][1];
+
+            /* [ ВОЗРОЖДЕНИЕ ] */
+            setTimeout(() => {
+
+              /* [ ПОПОЛНИТЬ ЗДОРОВЬЕ ] */
+              document.getElementsByClassName('zdorove')[index].style.display = 'none';
+              document.getElementsByClassName('shkala')[index].style.background = 'greenyellow';
+              v[5][index] = 50;
+              document.getElementsByClassName('shkala')[index].style.width = v[5][index]+'px';
+
+              /* [ ВЫДВИНУТЬСЯ НА ПОЗИЦИЮ ] */
+              w.style.display = 'block';
+              run(index,fire[index][0],fire[index][1]);
+            },3000);
           }
 
           b.remove(); 
@@ -176,349 +534,8 @@ document.body.onclick = (e) => {
 }
 
 
-/* [ CREATE WALL ] */
-function createWall(x,y,z){
-  let a = document.createElement('div');
-  a.style.margin = y+'px 0 0 '+x+'px';
-  a.style.border = '1px solid black';
-  a.style.position = 'absolute';
-  a.style.zIndex = 2;
-  a.style.width = '50px';
-  a.style.height = '50px';
-  a.style.background = (z) ? z : 'white';
-  a.setAttribute('class', 'wall');
-  document.body.append(a);
-} 
-//createWall(300,150,'gray');
-createWall(600,200,'gray');
-createWall(800,400,'pink');
-
-/* [ WHITE ] */
-createWall(595,350);
-createWall(650,550);
-createWall(705,255);
 
 
-
-/* [ CREATE SONG ] */
-function createSong(x,y){
-  let a = document.createElement('img');
-  a.style.margin = y+'px 0 0 '+x+'px';
-  a.style.border = '1px solid orange';
-  a.style.position = 'absolute';
-  a.style.zIndex = 1;
-  a.style.width = '50px';
-  a.style.height = '50px';
-  a.src = 'music/music.png';
-  a.setAttribute('class', 'wall');
-  document.body.append(a);
-} createSong(50,50);
-
-
-
-/* [ ACCOUTREMENT ] */
-function accoutrement(x,y,z){ 
-  setTimeout(() => {
-    let a = document.createElement('div');
-    a.style.margin = random(y,(y+200))+'px 0 0 '
-                    +random(x,(x+200))+'px';
-    a.style.zIndex = 1;
-    a.style.position = 'absolute';
-    a.style.width = '50px';
-    a.style.height = '50px';
-    a.style.background = 'url(img/'+z+'.png)';
-    a.setAttribute('x', x);
-    a.setAttribute('y', y);
-    a.setAttribute('class', z);
-    document.body.append(a);
-  }, 1000); 
-} 
-accoutrement(200,250,'ammo');
-accoutrement(200,250,'medic');
-accoutrement(1050,150,'medic');
-accoutrement(1050,450,'ammo');
-
-
-/* [ CREATE BLOCK ] */
-let block = [[340,220,'brown'],
-             [400,270,'black'],
-             [900,260,'greenyellow'],
-             [1000,260,'yellow']];
-function createBlock(z){
-  for(let i=0; i<z.length; i++){
-    let a = document.createElement('div');
-    a.style.margin = z[i][1]+'px 0 0 '+z[i][0]+'px';
-    a.style.border = '1px solid black';
-    a.style.position = 'absolute';
-    a.style.zIndex = 2;
-    a.style.width = '50px';
-    a.style.height = '50px';
-    a.style.background = (z[i][2]) ? z[i][2] : 'white';
-    a.setAttribute('class', 'block');
-    a.setAttribute('index', i);
-    document.body.append(a);
-  }
-} createBlock(block);
-
-
-
-
-
-/* [ CREATE VRAG ] */
-let v = {
-  0: [[300,280, 'orange'],[500,450, 'blue'],
-      [450,150, 'green' ],[150,500, '',   ]],
-  1:  [0,1],
-  2: document.getElementsByClassName('vrag'),
-  3: [], 
-  4: [], // delete
-  5: []
-}; 
-
-function createVragi(){
-  for(let i=0; i<v[0].length; i++){
-    let a = document.createElement('div');
-    a.style.margin = v[0][i][0]+'px 0 0 '+v[0][i][1]+'px';
-    //a.style.border = (v[0][i][2]) ? '1px solid '
-    //+v[0][i][2] : '1px solid red';
-    a.style.position = 'absolute';
-    a.style.zIndex = 0;
-    a.style.width = '50px';
-    a.style.height = '50px';
-    a.style.background = 'url(img/usr/1/0.png)';
-    a.setAttribute('index', i);
-    a.setAttribute('class', 'vrag');
-    document.body.append(a);
-
-    let b = document.createElement('div');
-    b.style.width = '50px';
-    b.style.height = '5px';
-    b.style.border = '1px solid green';
-    b.style.position = 'absolute';
-    b.style.margin = '-10px 0 0 0';
-    b.style.display = 'none';
-    b.setAttribute('class','zdorove');
-    a.append(b);
-
-    let c = document.createElement('div');
-    c.style.background = 'greenyellow';
-    c.style.width = '50px';
-    c.style.height = '5px';
-    c.setAttribute('class','shkala');
-    b.append(c);
-
-    v[3].push([0,0,0,0,0,0,0]); 
-    v[4].push([0,0,0,0,0,0,0]);
-    v[5].push(50);
-  }
-} createVragi();
-
-
-
-/* [ ... ] */
-function bot_fire(){
-   /* [ ... ] */
-  audio('pistol/0');
-
-  for(let i=0;i<v[0].length; i++){
-
-    let x1 = 0, y1 = 0,
-    k = ((y+25)-(v[0][i][1]+25))/((x+25)-(v[0][i][0]+25));
-
-    let b = document.createElement('div');
-    b.style.margin = (v[0][i][1]+25)+'px 0 0 '+(v[0][i][0]+25)+'px';
-    b.style.width = '2px';
-    b.style.height = '2px';
-    b.style.zIndex = -1;
-    b.style.position = 'absolute';
-    b.style.background = 'red';
-    document.body.append(b);
-
-    let z = setInterval(() => {
-      ((x+25)>(v[0][i][0]+25) ? x1+=10 : x1-=10 ); y1=(k*x1);
-      if(y1>-500 && y1<500){ 
-        
-        b.style.margin = (y1+(v[0][i][1]+25))+'px 0 0 '+(x1+(v[0][i][0]+25))+'px';
-        
-        let w = document.elementFromPoint(b.getBoundingClientRect().x,
-                                          b.getBoundingClientRect().y);
-
-        /* [ ... ] */
-        if(b.getBoundingClientRect().x<50){   b.remove(); } 
-        if(b.getBoundingClientRect().y<50){   b.remove(); } 
-        if(b.getBoundingClientRect().x>1998){ b.remove(); }
-        if(b.getBoundingClientRect().y>1998){ b.remove(); }
-
-        /* [ VRAG ] */
-        if(w.classList == 'user'){ 
-          document.getElementById('zdorove').style.display = 'block'; 
-          u[2]-=5;
-          document.getElementById('shkala').style.width = u[2]+'px';
-
-          if(u[2]>37.5){  
-            document.getElementById('shkala').style.background = 'greenyellow';
-          } else if(u[2]>25){
-            document.getElementById('shkala').style.background = 'yellow';
-          } else if(u[2]>12.5){
-            document.getElementById('shkala').style.background = 'orange';
-          } else if(u[2]>0){
-            document.getElementById('shkala').style.background = 'red';
-          } else if(u[2]==0){
-            w.style.display = 'none';
-          }
-
-          b.remove(); 
-        }
-
-        /* [ WALL ] */
-        if(w.classList == 'wall' || w.classList == 'block'){ 
-          b.remove(); 
-        }
-
-      }
-    },10);
-    setTimeout(() => { clearInterval(z); b.remove(); },3000);
-  }
-} setInterval(()=>{ bot_fire(); },1000);
-
-function run(){
-    let a = setInterval(() => {
-      for(let i=0; i<v[0].length; i++){
-        
-        v[3][i][0] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y);
-        v[3][i][1] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y-2);
-        v[3][i][2] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y-2);
-        v[3][i][3] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y);
-        v[3][i][4] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+52,v[2][i].getBoundingClientRect().y+50);
-        v[3][i][5] = document.elementFromPoint(v[2][i].getBoundingClientRect().x+50,v[2][i].getBoundingClientRect().y+52);
-        v[3][i][6] = document.elementFromPoint(v[2][i].getBoundingClientRect().x,   v[2][i].getBoundingClientRect().y+52);
-        v[3][i][7] = document.elementFromPoint(v[2][i].getBoundingClientRect().x-2, v[2][i].getBoundingClientRect().y+50);
-
-        /* [ ... ] */
-        if(v[0][i][0]<50){v[0][i][0]+=2;} if(v[0][i][0]>1998){v[0][i][0]-=2;}
-        if(v[0][i][1]<50){v[0][i][1]+=2;} if(v[0][i][1]>1998){v[0][i][1]-=2;}
-
-        for(let j=0; j<v[3][i].length; j++){
-
-          /* [ AMMO ] */
-          if(v[3][i][j].classList == 'ammo'){
-            accoutrement(parseInt(v[3][i][j].getAttribute('x')), parseInt(v[3][i][j].getAttribute('y')),'ammo');
-            v[3][i][j].remove();
-
-            /* [ ... ] */
-            audio('pistol/2'); break;
-          }
-
-          /* [ MEDIC ] */
-          if(v[3][i][j].classList == 'medic'){
-            accoutrement(parseInt(v[3][i][j].getAttribute('x')), parseInt(v[3][i][j].getAttribute('y')),'medic');
-            v[3][i][j].remove();
-
-            /* [ ... ] */
-            v[5][i] = 50;
-            document.getElementsByClassName('shkala')[i].style.background = 'greenyellow';
-            document.getElementsByClassName('shkala')[i].style.width = v[5][i]+'px';
-            audio('star'); break;
-          }
-
-          /* [ WALL ] */
-          if(v[3][i][j].classList == 'wall'){
-            if(i == 0 || i == 7){ v[0][i][0]+=2; }
-            if(i == 3 || i == 4){ v[0][i][0]-=2; }
-            if(i == 1 || i == 2){ v[0][i][1]+=2; }
-            if(i == 6 || i == 5){ v[0][i][1]-=2; }
-            break;
-          }
-
-          /* [ BLOCK ] */
-          // if(v[3][i][j].classList == 'block'){
-          //   //let z = v[3][i][j].getAttribute('index');
-
-          //   /* [ ... ] */
-          //   document.getElementById('info').innerHTML = v[3][i][j];
-
-          //   if(i == 0 || i == 7){ v[2][i].style.borderLeft   = '1px solid blue'; }
-          //   if(i == 3 || i == 4){ v[2][i].style.borderRight  = '1px solid blue'; }
-          //   if(i == 1 || i == 2){ v[2][i].style.borderTop    = '1px solid blue'; }
-          //   if(i == 6 || i == 5){ v[2][i].style.borderBottom = '1px solid blue'; }
-          //   // v[3][i][j].style.margin = block[z][1]+'px 0 0 '+block[z][0]+'px';  
-          //   break;
-          // }
-        }
-
-        if(v[1][1]){
-          v[0][i][0]+=2;
-          v[0][i][1]-=2;
-          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
-                                +v[0][i][0]+'px';
-          v[2][i].style.background = 'url(img/usr/5/'+v[1][0]+'.png)';
-          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0;
-        } else {
-          v[0][i][0]-=2;
-          v[0][i][1]+=2;
-          v[2][i].style.margin = v[0][i][1]+'px 0 0 '
-                                +v[0][i][0]+'px';
-          v[2][i].style.background = 'url(img/usr/6/'+v[1][0]+'.png)';
-          (v[1][0]<4) ? v[1][0]++ : v[1][0] = 0;
-        }
-
-      }
-    }, 80);
-
-    setTimeout(() => {
-      clearInterval(a);
-      for(let i=0; i<v[0].length; i++){
-        v[2][i].style.background = 'url(img/usr/1/'+v[1][0]+'.png)';
-      }
-      v[1][1] = (v[1][1]) ? v[1][1] = 0 : v[1][1] = 1; run();
-    }, 5000);
-
-} run();
-
-
-
-
-
-/* [ OBJECT USER ] */
-let u = {
-  0: [200,150],
-  1: document.getElementsByClassName('user'),
-  2: 50,
-};
-// Position
-let x = 200; let  y = 150; 
-
-/* [ CREATE USER ] */
-function createUser(){
-  let a = document.createElement('div');
-  a.style.margin = y+'px 0 0 '+x+'px'; 
-  a.style.border = '1px solid red';
-  a.style.position = 'absolute';
-  a.style.zIndex = 1;
-  a.style.width = '50px';
-  a.style.height = '50px';
-  a.style.background = 'url(img/usr/1/0.png)';
-  a.setAttribute('id', 'user');
-  a.setAttribute('class', 'user');
-  document.body.append(a);
-
-  let b = document.createElement('div');
-  b.style.width = '50px';
-  b.style.height = '5px';
-  b.style.border = '1px solid green';
-  b.style.position = 'absolute';
-  b.style.margin = '-10px 0 0 0';
-  b.style.display = 'none';
-  b.setAttribute('id','zdorove');
-  a.append(b);
-
-  let c = document.createElement('div');
-  c.style.background = 'greenyellow';
-  c.style.width = u[2]+'px';
-  c.style.height = '5px';
-  c.setAttribute('id','shkala');
-  b.append(c);
-} createUser();
 
 /* [ CONTACT ] */
 function contact(){
