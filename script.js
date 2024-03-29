@@ -1,3 +1,9 @@
+/* [ OBJECT GAME ] */
+let score = [10,10]; 
+
+// Scroll
+let sx = 0, sy = 0; 
+
 /* [ GAME SATTINGS ] */
 document.body.style.overflow = 'hidden';
 document.oncontextmenu = function(){ 
@@ -13,8 +19,7 @@ function random(min,max){
 
 function audio(x,y){
   let a = new Audio('music/'+x+'.mp3');
-  a.volume = '0.2';
-  a.play();
+  a.volume = '0.2'; a.play();
   return (y) ? a : false;
 } 
 
@@ -60,10 +65,6 @@ function marker(x,y,z){
   document.body.append(a);
 } 
 
-/* [ OBJECT GAME ] */
-let score = [0,0]; 
-// Scroll
-let sx = 0, sy = 0; 
 
 
 
@@ -83,13 +84,14 @@ function createWall(x,y,z){
   a.setAttribute('class', 'wall');
   document.body.append(a);
 } 
-//createWall(300,150,'gray');
+
+/* [ WALL ] */
 createWall(260,150,'gray');
 createWall(600,200,'gray');
 createWall(800,400,'pink');
 
 /* [ WHITE ] */
-createWall(500,422,'brown');
+createWall(500,422,'pink');
 createWall(650,550);
 createWall(705,255);
 
@@ -107,7 +109,7 @@ function createSong(x,y){
   a.src = 'music/music.png';
   a.setAttribute('class', 'wall');
   document.body.append(a);
-} createSong(50,50);
+} //createSong(50,50);
 
 
 
@@ -128,17 +130,22 @@ function accoutrement(x,y,z){
     document.body.append(a);
   }, 1000); 
 } 
-accoutrement(200,250,'ammo');
-accoutrement(200,250,'medic');
-// accoutrement(1050,150,'medic');
-// accoutrement(1050,450,'ammo');
+accoutrement(100,300,'ammo');
+accoutrement(100,300,'medic');
+
+setTimeout(() => {
+  accoutrement(1050,150,'medic');
+  accoutrement(1050,450,'ammo');
+}, 8000);
+
+
 
 
 /* [ CREATE BLOCK ] */
-let block = [[280,300,'brown'],
-             [400,270,'black'],
-             [900,260,'greenyellow'],
-             [1000,260,'yellow']];
+let block = [[500,200,'brown'],
+             [500,310,'brown'],
+             [800,100,'brown'],
+             [900,100,'brown']];
 function createBlock(z){
   for(let i=0; i<z.length; i++){
     let a = document.createElement('div');
@@ -153,7 +160,7 @@ function createBlock(z){
     a.setAttribute('index', i);
     document.body.append(a);
   }
-} //createBlock(block);
+} createBlock(block);
 
 
 
@@ -165,9 +172,7 @@ let v = {
       [1050,350, 'green' ],[1050,450, 'red',]],
   1:  [0,1],
   2: document.getElementsByClassName('vrag'),
-  3: [], 
-  4: [], // delete
-  5: []
+  3: [], 4: [], 5: []
 }; 
 
 function createVragi(){
@@ -208,8 +213,6 @@ function createVragi(){
   }
 } createVragi();
 
-
-
 /* [ СМЕЩЕНИЕ К ТОЧКЕ ] */
 function run(i,x,y){
   let x1 = 0, y1 = 0;
@@ -222,31 +225,29 @@ function run(i,x,y){
       x1+=2; y1=(k*x1);
       if((x1+v[0][i][0]) < x){
         v[2][i].style.margin = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
-        
       } else {
-     
         clearInterval(z);
         v[0][i][0] = (x1+v[0][i][0]);
         v[0][i][1] = (y1+v[0][i][1]);
-        document.getElementById('info').innerHTML = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
       }
     } else {
       x1-=2; y1=(k*x1);
       if((x1+v[0][i][0]) > x){
         v[2][i].style.margin = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
-        
       } else {
-        
         clearInterval(z);
         v[0][i][0] = (x1+v[0][i][0]);
         v[0][i][1] = (y1+v[0][i][1]);
-        document.getElementById('info').innerHTML = (y1+v[0][i][1])+'px 0 0 '+(x1+v[0][i][0])+'px';
       }
     }
   }, 24);
 } 
 
 
+
+
+/* [ SCORE ] */
+document.getElementById('info').innerHTML = ' | '+score[0]+' | '+score[1]+' | ';
 
 /* [ СМЕЩЕНИЕ К УКРЫТИЮ ] */
 run(0,700,200); //orange
@@ -268,7 +269,29 @@ setTimeout(() => {
   fireBot(1);
   fireBot(2);
   fireBot(3);
-},8600);
+},8500);
+
+/* [ ПЕРЕГРУПИРОВАТЬСЯ ] */
+setTimeout(()=>{
+  let t = 0;
+  setInterval(() => { 
+    if(!t){
+      run(0,757,205);
+      run(1,850,350);
+      run(2,650,150);
+      run(3,550,372);
+      t = 1;
+    } else {
+      run(0,650,150); 
+      run(1,550,372); 
+      run(2,757,205); 
+      run(3,850,350);
+      t = 0; 
+    }
+  },9000);
+},13000);
+
+
 
 
 
@@ -291,6 +314,7 @@ function fireBot(i){
     document.body.append(b);
     
     let z = setInterval(() => {
+    //for(let i=0; i<100; i++){
       ((x+25)>(v[0][i][0]+25) ? x1+=10 : x1-=10 ); y1=(k*x1);
       if(y1>-500 && y1<500){ 
         
@@ -323,6 +347,14 @@ function fireBot(i){
             x = 200; sx = 0;
             y = 150; sy = 0;
 
+            /* [ SCORE ] */
+            if(score[0]>0){ 
+              score[0]--; 
+              document.getElementById('info').innerHTML = ' | '+score[0]+' | '+score[1]+' | ';
+            } else { 
+              document.getElementById('info').innerHTML = '<b style="color:red">ВЫ ПРОИГРАЛИ!!!</b>'; 
+            }
+
             /* [ ВОЗРОЖДЕНИЕ ] */
             setTimeout(() => {
 
@@ -352,16 +384,6 @@ function fireBot(i){
   } 
  },1000+(i*100));
 } 
-
-
-/* [ ONMOUSEMOVE ] */
-document.onmousemove = (e) => {
-  document.getElementById('info').innerHTML = 'x: '+e.pageX+' y: '+e.pageY;
-}
-
-
-
-
 
 
 
@@ -415,7 +437,7 @@ function createUser(){
 // Точка начала огня
 let p = [0,0];
 //Количкство патронов
-let w = [120, 0, 0, 0, 0, 0, 0];
+let w = [50, 0, 0, 0, 0, 0, 0];
 
 document.body.onclick = (e) => {
   //Если есть патроны
@@ -425,7 +447,7 @@ document.body.onclick = (e) => {
     audio('pistol/0'); w[0]--;
 
     // Анимация выстрела  
-    u[1].src = 'img/usr/8/0.png';
+    u[1][0].style.background = 'url(img/usr/8/0.png)';
 
     p[0] = x+25;
     p[1] = y+25;
@@ -443,6 +465,7 @@ document.body.onclick = (e) => {
     document.body.append(b);
 
     let z = setInterval(() => {
+    //for(let i=0; i<100; i++){
       (e.pageX>p[0] ? x1+=10 : x1-=10 ); y1=(k*x1);
       if(y1>-500 && y1<500){
         
@@ -479,6 +502,14 @@ document.body.onclick = (e) => {
             w.style.display = 'none';
             v[0][index][0] = start[index][0];
             v[0][index][1] = start[index][1];
+
+            /* [ SCORE ] */
+            if(score[1]>0){ 
+              score[1]--; 
+              document.getElementById('info').innerHTML = ' | '+score[0]+' | '+score[1]+' | ';
+            } else { 
+              document.getElementById('info').innerHTML = '<b style="color:green">ПОБЕДА!</b>'; 
+            }
 
             /* [ ВОЗРОЖДЕНИЕ ] */
             setTimeout(() => {
@@ -526,11 +557,15 @@ document.body.onclick = (e) => {
 
       }
     },10);
-    setTimeout(() => { clearInterval(z); b.remove(); },3000);
+
+    setTimeout(() => { 
+      clearInterval(z);
+      b.remove();
+      u[1][0].style.background = 'url(img/usr/1/0.png)'; 
+    },3000);
 
   /* [ ЕСЛИ НЕТ ПАТРОНОВ ] */
   } else { audio('pistol/1'); }
-
 }
 
 
@@ -645,17 +680,17 @@ function anim(e){
   if(c == 'KeyS' && d == 'KeyA' || d == 'KeyS' && c == 'KeyA'){ clearInterval(r); r = setInterval(() => { u[1][0].style.background = 'url(img/usr/6/'+n+'.png)'; (n<4) ? n++ : n = 0; }, 100); }
 }
 
-document.onclick = (e) => { 
-  u[1][0].style.background = 
-  (e.pageX>(y+50) && e.pageY>(x+50)) ? 'url(img/usr/7/'+n+'.png)' :
-  (e.pageX<y && e.pageY>(x+50))      ? 'url(img/usr/6/'+n+'.png)' :
-  (e.pageX>(y+50) && e.pageY<x)      ? 'url(img/usr/5/'+n+'.png)' :
-  (e.pageX<y && e.pageY<x)           ? 'url(img/usr/4/'+n+'.png)' :
-  (e.pageX>(y+50) && e.pageY>x)      ? 'url(img/usr/3/'+n+'.png)' :
-  (e.pageX<y && e.pageY>x)           ? 'url(img/usr/2/'+n+'.png)' :
-  (e.pageX>y && e.pageY>(x+50))      ? 'url(img/usr/1/'+n+'.png)' :
-  (e.pageX>y && e.pageY<(x+50))      ? 'url(img/usr/0/'+n+'.png)' :
-                                       'url(img/usr/1/'+n+'.png)' ;
-}
+// document.onclick = (e) => { 
+//   u[1][0].style.background = 
+//   (e.pageX>(y+50) && e.pageY>(x+50)) ? 'url(img/usr/7/'+n+'.png)' :
+//   (e.pageX<y && e.pageY>(x+50))      ? 'url(img/usr/6/'+n+'.png)' :
+//   (e.pageX>(y+50) && e.pageY<x)      ? 'url(img/usr/5/'+n+'.png)' :
+//   (e.pageX<y && e.pageY<x)           ? 'url(img/usr/4/'+n+'.png)' :
+//   (e.pageX>(y+50) && e.pageY>x)      ? 'url(img/usr/3/'+n+'.png)' :
+//   (e.pageX<y && e.pageY>x)           ? 'url(img/usr/2/'+n+'.png)' :
+//   (e.pageX>y && e.pageY>(x+50))      ? 'url(img/usr/1/'+n+'.png)' :
+//   (e.pageX>y && e.pageY<(x+50))      ? 'url(img/usr/0/'+n+'.png)' :
+//                                        'url(img/usr/1/'+n+'.png)' ;
+// }
 
 
